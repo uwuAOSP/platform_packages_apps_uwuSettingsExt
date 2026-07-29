@@ -289,11 +289,11 @@
     <string name="key_attestation_apps_category">App exclusions</string>
     <string name="key_attestation_pif_category">Play Integrity properties</string>
     <string name="keybox_data_title">Import Keybox XML</string>
-    <string name="keybox_data_summary">Select a Keybox XML file to replace the built-in default</string>
+    <string name="keybox_data_summary">Select a Keybox XML file and enable the integrated Keybox</string>
     <string name="pif_data_title">Import pif.json</string>
     <string name="pif_data_summary">Select a pif.json used for GMS and the Play Store</string>
     <string name="key_attestation_clear_keybox_title">Clear imported Keybox</string>
-    <string name="key_attestation_clear_keybox_summary">Return to the built-in Keybox</string>
+    <string name="key_attestation_clear_keybox_summary">Disable the integrated Keybox unless persist.sys.keybox.enabled is set</string>
     <string name="key_attestation_clear_pif_title">Clear imported pif.json</string>
     <string name="key_attestation_clear_pif_summary">Return to dynamically fetched properties</string>
     <string name="key_attestation_excluded_apps_title">Excluded apps</string>
@@ -308,7 +308,7 @@
     <string name="key_attestation_status_imported">Status: Imported custom data</string>
     <string name="key_attestation_status_unparsed">Status: Some fields could not be parsed</string>
     <string name="key_attestation_unknown">Unknown</string>
-    <string name="key_attestation_keybox_footer_empty">Status: Using built-in defaults</string>
+    <string name="key_attestation_keybox_footer_empty">Status: Integrated Keybox disabled</string>
     <string name="key_attestation_pif_footer_empty">Status: Using dynamic defaults</string>
     <string name="key_attestation_keybox_algorithm_ecdsa">ECDSA</string>
     <string name="key_attestation_keybox_algorithm_rsa">RSA</string>
