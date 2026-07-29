@@ -286,11 +286,11 @@
     <string name="key_attestation_apps_category">应用排除</string>
     <string name="key_attestation_pif_category">Play Integrity 属性</string>
     <string name="keybox_data_title">导入 Keybox XML</string>
-    <string name="keybox_data_summary">选择 Keybox XML 文件以替换内置默认值</string>
+    <string name="keybox_data_summary">选择 Keybox XML 文件并启用内置 Keybox</string>
     <string name="pif_data_title">导入 pif.json</string>
     <string name="pif_data_summary">选择用于 GMS 和 Play 商店的 pif.json</string>
     <string name="key_attestation_clear_keybox_title">清除导入的 Keybox</string>
-    <string name="key_attestation_clear_keybox_summary">恢复使用内置 Keybox</string>
+    <string name="key_attestation_clear_keybox_summary">禁用内置 Keybox；persist.sys.keybox.enabled 已开启时除外</string>
     <string name="key_attestation_clear_pif_title">清除导入的 pif.json</string>
     <string name="key_attestation_clear_pif_summary">恢复使用动态获取的属性</string>
     <string name="key_attestation_excluded_apps_title">排除应用</string>
@@ -305,7 +305,7 @@
     <string name="key_attestation_status_imported">Status: Imported custom data</string>
     <string name="key_attestation_status_unparsed">Status: Some fields could not be parsed</string>
     <string name="key_attestation_unknown">Unknown</string>
-    <string name="key_attestation_keybox_footer_empty">Status: Using built-in defaults</string>
+    <string name="key_attestation_keybox_footer_empty">状态：内置 Keybox 已禁用</string>
     <string name="key_attestation_pif_footer_empty">Status: Using dynamic defaults</string>
     <string name="key_attestation_keybox_algorithm_ecdsa">ECDSA</string>
     <string name="key_attestation_keybox_algorithm_rsa">RSA</string>
