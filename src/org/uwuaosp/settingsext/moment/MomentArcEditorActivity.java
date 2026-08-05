@@ -58,6 +58,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
+    private static final String EMPTY_TARGET = "empty:";
     private static final int SOURCE_SPAN_COUNT = 5;
     private static final String STATE_IS_LEFT = "is_left";
     private static final String STATE_SEARCH_QUERY = "search_query";
@@ -377,8 +378,15 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
             if (count >= MomentArcLayout.INNER_CONFIGURABLE) {
                 break;
             }
+            if (EMPTY_TARGET.equals(rawTarget)) {
+                assignedTargets.add(null);
+                count++;
+                continue;
+            }
             ParsedTarget parsedTarget = parseTarget(rawTarget);
             if (parsedTarget == null) {
+                assignedTargets.add(null);
+                count++;
                 continue;
             }
             TargetInfo resolved = allTargetsByKey.get(parsedTarget.getKey());
@@ -388,8 +396,10 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
             }
             if (resolved != null) {
                 assignedTargets.add(resolved);
-                count++;
+            } else {
+                assignedTargets.add(null);
             }
+            count++;
         }
         while (assignedTargets.size() < MomentArcLayout.INNER_CONFIGURABLE) {
             assignedTargets.add(null);
@@ -401,8 +411,15 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
             if (count >= MomentArcLayout.OUTER_CONFIGURABLE) {
                 break;
             }
+            if (EMPTY_TARGET.equals(rawTarget)) {
+                assignedTargets.add(null);
+                count++;
+                continue;
+            }
             ParsedTarget parsedTarget = parseTarget(rawTarget);
             if (parsedTarget == null) {
+                assignedTargets.add(null);
+                count++;
                 continue;
             }
             TargetInfo resolved = allTargetsByKey.get(parsedTarget.getKey());
@@ -412,8 +429,10 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
             }
             if (resolved != null) {
                 assignedTargets.add(resolved);
-                count++;
+            } else {
+                assignedTargets.add(null);
             }
+            count++;
         }
         while (assignedTargets.size() < MomentArcLayout.TOTAL_CONFIGURABLE) {
             assignedTargets.add(null);
@@ -680,9 +699,7 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
         ArrayList<String> innerTargets = new ArrayList<>();
         for (int i = 0; i < MomentArcLayout.INNER_CONFIGURABLE; i++) {
             TargetInfo target = mAssignedTargets.get(i);
-            if (target != null) {
-                innerTargets.add(target.toStoredValue());
-            }
+            innerTargets.add(target != null ? target.toStoredValue() : EMPTY_TARGET);
         }
         MomentArcSettings.saveInnerRingTargets(this, innerTargets);
 
@@ -690,9 +707,7 @@ public class MomentArcEditorActivity extends CollapsingToolbarBaseActivity {
         for (int i = MomentArcLayout.INNER_CONFIGURABLE;
                 i < MomentArcLayout.TOTAL_CONFIGURABLE; i++) {
             TargetInfo target = mAssignedTargets.get(i);
-            if (target != null) {
-                outerTargets.add(target.toStoredValue());
-            }
+            outerTargets.add(target != null ? target.toStoredValue() : EMPTY_TARGET);
         }
         MomentArcSettings.saveOuterRingTargets(this, outerTargets);
     }
