@@ -137,6 +137,9 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
         mutableStateOf(preferences.isAiEntryUnlocked())
     }
     var headerTapCount by remember { mutableIntStateOf(0) }
+    val launcherSettingsIntent = remember {
+        Intent(Intent.ACTION_APPLICATION_PREFERENCES).setPackage(LAUNCHER_PACKAGE)
+    }
 
     SettingsScaffold(
         title = stringResource(R.string.app_name),
@@ -211,11 +214,7 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_launcher_settings)
             },
-            onClick = {
-                context.startActivity(
-                    Intent(Intent.ACTION_APPLICATION_PREFERENCES).setPackage(LAUNCHER_PACKAGE),
-                )
-            },
+            onClick = { context.startActivity(launcherSettingsIntent) },
         )
         PreferenceGroupSpacer()
         PrimarySwitchPreferenceRow(
