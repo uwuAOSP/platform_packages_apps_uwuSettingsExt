@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (C) 2026 UwUniverse
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.70"
+        android:scaleY="0.70">
+        <path
+            android:fillColor="#A3BDFF"
+            android:pathData="M53.19,78.52H51.95L50.71,70.5C47,69.89 43.91,67.73 41.44,64.95L34.02,68.03L31.54,64.02L38.04,59.09C36.8,55.39 36.8,51.69 38.04,47.99L31.54,43.67L34.02,39.66L41.44,42.74C43.91,39.97 47,38.11 50.71,37.19L51.64,29.17H56.28L57.51,37.19C61.23,37.81 64.63,39.97 66.79,42.74L74.21,39.66L76.69,43.67L70.19,48.29C70.81,50.14 71.12,51.99 71.12,53.85H72.67C74.21,53.85 75.76,54.15 77.3,54.46V53.85L76.99,50.76L83.49,45.83C84.11,45.21 84.11,44.59 83.8,43.98L77.61,33.18C77.3,32.25 76.69,32.25 75.76,32.25L68.03,35.34C66.48,34.1 64.63,33.18 62.77,32.25L61.53,23.93C61.84,23.62 60.92,23 60.3,23H47.93C47.31,23 46.38,23.62 46.38,24.23L45.15,32.56C43.29,33.18 41.75,34.41 39.89,35.34L32.47,32.25C31.54,32.25 30.92,32.25 30.31,33.18L24.12,43.98C23.81,44.59 24.12,45.21 24.74,45.83L31.23,50.76L30.92,53.85L31.23,56.93L24.74,62.17C24.12,62.79 24.12,63.41 24.43,64.02L30.61,74.82C30.92,75.44 31.54,75.44 32.47,75.44L40.2,72.35C41.75,73.59 43.6,74.51 45.46,75.44L46.69,83.77C46.69,84.38 47.31,85 48.24,85H55.97C54.42,82.84 53.8,80.68 53.19,78.52ZM66.48,54.77V53.85C66.48,47.06 60.92,41.51 54.11,41.51C47.31,41.51 41.75,47.06 41.75,53.85C41.75,60.63 47.31,66.18 54.11,66.18C56.28,60.94 60.92,56.62 66.48,54.77ZM47.93,53.85C47.93,50.45 50.71,47.68 54.11,47.68C57.51,47.68 60.3,50.45 60.3,53.85C60.3,57.24 57.51,60.01 54.11,60.01C50.71,60.01 47.93,57.24 47.93,53.85Z" />
+        <path
+            android:fillColor="#75BFFF"
+            android:pathData="M67.26,75.56H59.7V69.14H67.26V61.52H73.67V69.14H81.3V75.56H77.52H73.67V83.12H67.26V75.56Z" />
+    </group>
+</vector>
