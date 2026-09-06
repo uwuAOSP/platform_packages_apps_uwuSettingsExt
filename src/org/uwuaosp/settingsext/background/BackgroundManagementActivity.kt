@@ -338,7 +338,7 @@ private fun AppModePreferenceRow(
 }
 
 @Composable
-private fun ExpressiveModeMenuItem(
+internal fun ExpressiveModeMenuItem(
     text: String,
     selected: Boolean,
     position: Int,
