@@ -27,6 +27,27 @@
     <string name="settings_ext_launcher_settings_title">Home screen settings</string>
     <string name="settings_ext_lyric_fetch_title">Status Bar Lyric</string>
     <string name="settings_ext_ai_core_title">uwuAI Core</string>
+    <string name="interface_settings_title">Interface settings</string>
+    <string name="interface_settings_category_fonts">Fonts</string>
+    <string name="custom_font_title">Custom font</string>
+    <string name="custom_font_summary_default">System default</string>
+    <string name="custom_font_summary_active">Current: %1$s</string>
+    <string name="custom_font_restore_title">Restore default font</string>
+    <string name="custom_font_restore_summary">Remove the imported system font</string>
+    <string name="custom_font_file_invalid">Choose a TTF font file</string>
+    <string name="custom_font_apply_success">Font applied</string>
+    <string name="custom_font_restore_success">Default font restored</string>
+    <string name="custom_font_apply_failed">Could not apply font (error %1$d)</string>
+    <string name="custom_font_footer">The font is applied to newly started apps. Restart the device to update every screen.</string>
+    <string name="external_desktop_title">External display desktop</string>
+    <string name="external_desktop_description">Use the system desktop interface on USB-C, HDMI, and supported virtual displays</string>
+    <string name="external_desktop_enable_title">Use external display desktop</string>
+    <string name="external_desktop_behavior_category">Connected device</string>
+    <string name="external_desktop_blank_internal_title">Cover the built-in display</string>
+    <string name="external_desktop_blank_internal_summary">Show a black connection screen on this device while the external desktop is active</string>
+    <string name="external_desktop_allow_scrcpy_title">Allow scrcpy virtual displays</string>
+    <string name="external_desktop_allow_scrcpy_summary">Use desktop mode for displays created with scrcpy --new-display</string>
+    <string name="external_desktop_footer">Keyboard and mouse input follows the external desktop automatically. Disconnect the display to return to this device.</string>
 
     <string name="quick_settings_title">Quick settings</string>
     <string name="quick_settings_style_category">Quick Settings</string>
