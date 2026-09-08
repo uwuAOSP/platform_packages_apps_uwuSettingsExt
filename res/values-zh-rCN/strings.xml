@@ -39,6 +39,12 @@
     <string name="custom_font_restore_success">已恢复默认字体</string>
     <string name="custom_font_apply_failed">无法应用字体（错误 %1$d）</string>
     <string name="custom_font_footer">新启动的应用会使用此字体。重启设备后可更新所有界面。</string>
+    <string name="interface_settings_category_icons">系统图标</string>
+    <string name="system_small_icons_title">系统小图标</string>
+    <string name="system_small_icons_summary">自定义系统小图标</string>
+    <string name="system_small_icons_default">默认</string>
+    <string name="system_small_icons_pui">PUI</string>
+    <string name="system_small_icons_update_failed">无法更新系统小图标</string>
     <string name="external_desktop_title">外接屏桌面</string>
     <string name="external_desktop_description">通过 USB-C、HDMI 或受支持的虚拟屏使用系统桌面界面</string>
     <string name="external_desktop_enable_title">启用外接屏桌面</string>
