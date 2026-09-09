@@ -33,6 +33,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public final class BackgroundModeSecureSettings {
+    /** UI-only value for apps without an explicit mode: they follow the default mode. */
+    public static final int MODE_FOLLOW_DEFAULT = -1;
+
     public static final int MODE_DEFAULT =
             Settings.Secure.UWU_APP_BACKGROUND_MODE_DEFAULT;
     public static final int MODE_TOMBSTONE =
@@ -91,7 +94,8 @@ public final class BackgroundModeSecureSettings {
             while (keys.hasNext()) {
                 final String packageName = keys.next();
                 final int mode = object.optInt(packageName, MODE_DEFAULT);
-                if (mode == MODE_TOMBSTONE || mode == MODE_FULL || mode == MODE_AUTO) {
+                if (mode == MODE_DEFAULT || mode == MODE_TOMBSTONE || mode == MODE_FULL
+                        || mode == MODE_AUTO) {
                     modes.put(packageName, mode == MODE_AUTO ? MODE_TOMBSTONE : mode);
                 }
             }
@@ -105,7 +109,8 @@ public final class BackgroundModeSecureSettings {
             Context context, String packageName, int mode) {
         final TreeMap<String, Integer> modes = new TreeMap<>();
         modes.putAll(getModes(context));
-        if (mode == MODE_TOMBSTONE || mode == MODE_FULL || mode == MODE_AUTO) {
+        if (mode == MODE_DEFAULT || mode == MODE_TOMBSTONE || mode == MODE_FULL
+                || mode == MODE_AUTO) {
             modes.put(packageName, mode == MODE_AUTO ? MODE_TOMBSTONE : mode);
         } else {
             modes.remove(packageName);
@@ -122,6 +127,22 @@ public final class BackgroundModeSecureSettings {
         final String value = modes.isEmpty() ? null : object.toString();
         return Settings.Secure.putStringForUser(context.getContentResolver(),
                 Settings.Secure.UWU_APP_BACKGROUND_MODES, value, UserHandle.myUserId());
+    }
+
+    /** Returns the mode applied to apps without an explicit per-app mode. */
+    public static synchronized int getDefaultMode(Context context) {
+        final int value = Settings.Secure.getIntForUser(context.getContentResolver(),
+                Settings.Secure.UWU_APP_BACKGROUND_DEFAULT_MODE, MODE_DEFAULT,
+                UserHandle.myUserId());
+        return value == MODE_TOMBSTONE || value == MODE_FULL ? value : MODE_DEFAULT;
+    }
+
+    public static synchronized boolean setDefaultMode(Context context, int mode) {
+        if (mode != MODE_DEFAULT && mode != MODE_TOMBSTONE && mode != MODE_FULL) {
+            return false;
+        }
+        return Settings.Secure.putIntForUser(context.getContentResolver(),
+                Settings.Secure.UWU_APP_BACKGROUND_DEFAULT_MODE, mode, UserHandle.myUserId());
     }
 
     public static KernelStatus getKernelStatus() {

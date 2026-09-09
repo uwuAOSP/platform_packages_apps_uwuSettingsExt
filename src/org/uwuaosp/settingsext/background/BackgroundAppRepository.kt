@@ -84,9 +84,9 @@ internal class BackgroundAppRepository(private val context: Context) {
                 systemApp = systemApp,
                 configurable = configurable,
                 mode = if (configurable) {
-                    modes[packageName] ?: BackgroundModeSecureSettings.MODE_DEFAULT
+                    modes[packageName] ?: BackgroundModeSecureSettings.MODE_FOLLOW_DEFAULT
                 } else {
-                    BackgroundModeSecureSettings.MODE_DEFAULT
+                    BackgroundModeSecureSettings.MODE_FOLLOW_DEFAULT
                 },
             )
         }

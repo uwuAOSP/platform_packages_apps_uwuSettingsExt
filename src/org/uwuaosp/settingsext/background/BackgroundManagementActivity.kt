@@ -316,9 +316,10 @@ private fun AppModePreferenceRow(
                 shadowElevation = 3.dp,
             ) {
                 val modes = listOf(
-                    BackgroundModeSecureSettings.MODE_DEFAULT,
+                    BackgroundModeSecureSettings.MODE_FOLLOW_DEFAULT,
                     BackgroundModeSecureSettings.MODE_TOMBSTONE,
                     BackgroundModeSecureSettings.MODE_FULL,
+                    BackgroundModeSecureSettings.MODE_DEFAULT,
                 )
                 modes.forEachIndexed { index, mode ->
                     ExpressiveModeMenuItem(
@@ -414,6 +415,7 @@ private fun backgroundModeLabel(mode: Int): String {
         when (mode) {
             BackgroundModeSecureSettings.MODE_TOMBSTONE -> R.string.background_mode_tombstone
             BackgroundModeSecureSettings.MODE_FULL -> R.string.background_mode_full
+            BackgroundModeSecureSettings.MODE_DEFAULT -> R.string.background_mode_aosp_original
             else -> R.string.background_mode_default
         },
     )
