@@ -93,6 +93,10 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
     var freezerBackend by remember {
         mutableIntStateOf(BackgroundModeSecureSettings.getFreezerBackend(context))
     }
+    var defaultMode by remember {
+        mutableStateOf(BackgroundModeSecureSettings.getDefaultMode(context))
+    }
+    var defaultModeMenuExpanded by remember { mutableStateOf(false) }
     val kernelStatus = remember { BackgroundModeSecureSettings.getKernelStatus() }
     var backendMenuExpanded by remember { mutableStateOf(false) }
     var exporting by remember { mutableStateOf(false) }
@@ -137,12 +141,79 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
         SettingsCategory(title = stringResource(R.string.background_behavior_category))
+        PreferenceRow(
+            title = stringResource(R.string.background_default_mode_title),
+            summary = "",
+            showSummary = false,
+            position = PreferencePosition.Top,
+            onClick = { defaultModeMenuExpanded = true },
+            trailingContent = {
+                Box {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = defaultModeLabel(defaultMode),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                            contentDescription = stringResource(
+                                R.string.background_default_mode_title,
+                            ),
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = defaultModeMenuExpanded,
+                        onDismissRequest = { defaultModeMenuExpanded = false },
+                        modifier = Modifier.widthIn(min = 200.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        tonalElevation = 0.dp,
+                        shadowElevation = 3.dp,
+                    ) {
+                        val modes = listOf(
+                            BackgroundModeSecureSettings.MODE_DEFAULT,
+                            BackgroundModeSecureSettings.MODE_TOMBSTONE,
+                            BackgroundModeSecureSettings.MODE_FULL,
+                        )
+                        modes.forEachIndexed { index, mode ->
+                            ExpressiveModeMenuItem(
+                                text = defaultModeLabel(mode),
+                                selected = defaultMode == mode,
+                                position = index,
+                                itemCount = modes.size,
+                                onClick = {
+                                    defaultModeMenuExpanded = false
+                                    if (BackgroundModeSecureSettings.setDefaultMode(
+                                            context,
+                                            mode,
+                                        )
+                                    ) {
+                                        defaultMode = mode
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            R.string.background_setting_update_failed,
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
+            },
+        )
+        PreferenceGroupSpacer()
         SwitchPreferenceRow(
             title = stringResource(R.string.background_ignore_task_removal),
             summary = stringResource(R.string.background_ignore_task_removal_summary),
             showSummary = true,
             checked = ignoreTaskRemoval,
-            position = PreferencePosition.Top,
+            position = PreferencePosition.Middle,
             onCheckedChange = { enabled ->
                 if (BackgroundModeSecureSettings.setIgnoreTaskRemovalEnabled(context, enabled)) {
                     ignoreTaskRemoval = enabled
@@ -282,6 +353,17 @@ private fun freezerBackendLabel(backend: Int): String {
     )
 }
 
+@Composable
+private fun defaultModeLabel(mode: Int): String {
+    return stringResource(
+        when (mode) {
+            BackgroundModeSecureSettings.MODE_TOMBSTONE -> R.string.background_mode_tombstone
+            BackgroundModeSecureSettings.MODE_FULL -> R.string.background_mode_full
+            else -> R.string.background_mode_aosp_original
+        },
+    )
+}
+
 private object BackgroundLogExporter {
     fun export(context: Context, uri: Uri) {
         val modes = BackgroundModeSecureSettings.getModes(context)
@@ -296,6 +378,10 @@ private object BackgroundLogExporter {
             appendLine(
                 "[INFO] Ignore task removal: " +
                     BackgroundModeSecureSettings.isIgnoreTaskRemovalEnabled(context),
+            )
+            appendLine(
+                "[INFO] Default mode: " +
+                    modeName(BackgroundModeSecureSettings.getDefaultMode(context)),
             )
             appendLine("[INFO] Requested freezer backend: ${backendName(backend)}")
             appendLine(

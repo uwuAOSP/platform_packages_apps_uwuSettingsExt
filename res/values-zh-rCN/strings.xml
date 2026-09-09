@@ -76,6 +76,7 @@
     <string name="background_mode_default">默认</string>
     <string name="background_mode_tombstone">墓碑模式</string>
     <string name="background_mode_full">Full</string>
+    <string name="background_mode_aosp_original">AOSP 原始行为</string>
     <string name="background_search_apps">搜索应用</string>
     <string name="background_search_close">关闭搜索</string>
     <string name="background_no_apps">未找到应用</string>
@@ -85,6 +86,7 @@
     <string name="background_display_category">显示</string>
     <string name="background_show_system_apps">显示系统应用</string>
     <string name="background_behavior_category">行为</string>
+    <string name="background_default_mode_title">默认应用行为</string>
     <string name="background_ignore_task_removal">忽略启动器任务卡移除</string>
     <string name="background_ignore_task_removal_summary">从最近任务划掉时保留已管理应用的任务、页面状态和进程</string>
     <string name="background_setting_update_failed">无法更新后台管理设置</string>

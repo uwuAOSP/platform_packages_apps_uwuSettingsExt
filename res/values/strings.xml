@@ -76,6 +76,7 @@
     <string name="background_mode_default">Default</string>
     <string name="background_mode_tombstone">Tombstone</string>
     <string name="background_mode_full">Full</string>
+    <string name="background_mode_aosp_original">AOSP original</string>
     <string name="background_search_apps">Search apps</string>
     <string name="background_search_close">Close search</string>
     <string name="background_no_apps">No apps found</string>
@@ -85,6 +86,7 @@
     <string name="background_display_category">Display</string>
     <string name="background_show_system_apps">Show system apps</string>
     <string name="background_behavior_category">Behavior</string>
+    <string name="background_default_mode_title">Default app behavior</string>
     <string name="background_ignore_task_removal">Ignore launcher task removal</string>
     <string name="background_ignore_task_removal_summary">Keep managed app tasks, UI state, and processes when dismissed from recents</string>
     <string name="background_setting_update_failed">Could not update background setting</string>
