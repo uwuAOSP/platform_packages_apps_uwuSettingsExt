@@ -18,14 +18,29 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,6 +53,7 @@ import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
+import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
 
 class InterfaceSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +67,13 @@ class InterfaceSettingsActivity : ComponentActivity() {
 private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
     val context = LocalContext.current
     val controller = remember(context) { CustomFontController(context) }
+    val iconController = remember(context) { PuiSystemIconController(context) }
     val scope = rememberCoroutineScope()
     var activeFont by remember { mutableStateOf(controller.activeFontName()) }
     var operationRunning by remember { mutableStateOf(false) }
+    var activeIconStyle by remember { mutableStateOf(iconController.activeStyle()) }
+    var iconOperationRunning by remember { mutableStateOf(false) }
+    var iconMenuExpanded by remember { mutableStateOf(false) }
     val picker =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri == null) return@rememberLauncherForActivityResult
@@ -169,7 +189,85 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
             )
         }
         SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
+
+        SettingsCategory(title = stringResource(R.string.interface_settings_category_icons))
+        PreferenceRow(
+            title = stringResource(R.string.system_small_icons_title),
+            summary = stringResource(R.string.system_small_icons_summary),
+            enabled = !iconOperationRunning,
+            position = PreferencePosition.Single,
+            iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_system_small_icons) },
+            onClick = { iconMenuExpanded = true },
+            trailingContent = {
+                Box {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = systemIconStyleLabel(activeIconStyle),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Icon(
+                            painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                            contentDescription = stringResource(R.string.system_small_icons_title),
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = iconMenuExpanded,
+                        onDismissRequest = { iconMenuExpanded = false },
+                        modifier = Modifier.widthIn(min = 200.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                        tonalElevation = 0.dp,
+                        shadowElevation = 3.dp,
+                    ) {
+                        val styles = listOf(SystemIconStyle.DEFAULT, SystemIconStyle.PUI)
+                        styles.forEachIndexed { index, style ->
+                            ExpressiveModeMenuItem(
+                                text = systemIconStyleLabel(style),
+                                selected = activeIconStyle == style,
+                                position = index,
+                                itemCount = styles.size,
+                                onClick = {
+                                    iconMenuExpanded = false
+                                    if (activeIconStyle == style) return@ExpressiveModeMenuItem
+                                    scope.launch {
+                                        iconOperationRunning = true
+                                        try {
+                                            if (iconController.setStyle(style)) {
+                                                activeIconStyle = style
+                                            } else {
+                                                Toast.makeText(
+                                                        context,
+                                                        R.string.system_small_icons_update_failed,
+                                                        Toast.LENGTH_SHORT,
+                                                    )
+                                                    .show()
+                                            }
+                                        } finally {
+                                            iconOperationRunning = false
+                                        }
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
+            },
+        )
     }
+}
+
+@Composable
+private fun systemIconStyleLabel(style: SystemIconStyle): String {
+    return stringResource(
+        when (style) {
+            SystemIconStyle.DEFAULT -> R.string.system_small_icons_default
+            SystemIconStyle.PUI -> R.string.system_small_icons_pui
+        }
+    )
 }
 
 private val FONT_MIME_TYPES =
