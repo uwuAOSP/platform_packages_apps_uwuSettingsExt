@@ -64,6 +64,9 @@ import org.uwuaosp.compose.settingslib.rememberSettingsTypography
 import org.uwuaosp.settingsext.attestation.KeyAttestationSettingsActivity
 import org.uwuaosp.settingsext.appjump.AppJumpSettingsActivity
 import org.uwuaosp.settingsext.background.BackgroundManagementActivity
+import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSecureSettings
+import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSettingsActivity
+import org.uwuaosp.settingsext.interfaceui.InterfaceSettingsActivity
 import org.uwuaosp.settingsext.lyric.LyricSecureSettings
 import org.uwuaosp.settingsext.lyric.LyricSettingsActivity
 import org.uwuaosp.settingsext.moment.MomentSecureSettings
@@ -135,10 +138,18 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
     var momentEnabled by remember {
         mutableStateOf(MomentSecureSettings.isEnabled(context, false))
     }
+    var externalDesktopEnabled by remember {
+        mutableStateOf(ExternalDesktopSecureSettings.isEnabled(context))
+    }
     val momentSettingsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) {
         momentEnabled = MomentSecureSettings.isEnabled(context, false)
+    }
+    val externalDesktopSettingsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        externalDesktopEnabled = ExternalDesktopSecureSettings.isEnabled(context)
     }
     var aiEntryUnlocked by remember {
         mutableStateOf(preferences.isAiEntryUnlocked())
@@ -199,10 +210,23 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             PreferenceGroupSpacer()
         }
         PreferenceRow(
-            title = stringResource(R.string.background_management_title),
+            title = stringResource(R.string.interface_settings_title),
             summary = "",
             showSummary = false,
             position = if (qsEntryVisible) PreferencePosition.Middle else PreferencePosition.Top,
+            iconContent = {
+                SettingsHomepageIcon(iconRes = R.drawable.ic_interface_settings)
+            },
+            onClick = {
+                context.startActivity(Intent(context, InterfaceSettingsActivity::class.java))
+            },
+        )
+        PreferenceGroupSpacer()
+        PreferenceRow(
+            title = stringResource(R.string.background_management_title),
+            summary = "",
+            showSummary = false,
+            position = PreferencePosition.Middle,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_background_management)
             },
@@ -251,6 +275,26 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_launcher_settings)
             },
             onClick = { context.startActivity(launcherSettingsIntent) },
+        )
+        PreferenceGroupSpacer()
+        PrimarySwitchPreferenceRow(
+            title = stringResource(R.string.external_desktop_title),
+            summary = "",
+            showSummary = false,
+            checked = externalDesktopEnabled,
+            position = PreferencePosition.Middle,
+            onCheckedChange = { enabled ->
+                externalDesktopEnabled = enabled
+                ExternalDesktopSecureSettings.setEnabled(context, enabled)
+            },
+            onClick = {
+                externalDesktopSettingsLauncher.launch(
+                    Intent(context, ExternalDesktopSettingsActivity::class.java),
+                )
+            },
+            iconContent = {
+                SettingsHomepageIcon(iconRes = R.drawable.ic_external_desktop)
+            },
         )
         PreferenceGroupSpacer()
         PrimarySwitchPreferenceRow(
