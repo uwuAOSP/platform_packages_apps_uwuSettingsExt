@@ -19,6 +19,7 @@
         <permission name="android.permission.ACCESS_SHORTCUTS" />
         <permission name="android.permission.PACKAGE_USAGE_STATS" />
         <permission name="android.permission.READ_LOGS" />
+        <permission name="android.permission.UPDATE_FONTS" />
         <permission name="android.permission.WRITE_SECURE_SETTINGS" />
     </privapp-permissions>
 </permissions>

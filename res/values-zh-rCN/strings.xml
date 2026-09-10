@@ -27,6 +27,27 @@
     <string name="settings_ext_launcher_settings_title">主屏幕设置</string>
     <string name="settings_ext_lyric_fetch_title">状态栏歌词</string>
     <string name="settings_ext_ai_core_title">uwuAI Core</string>
+    <string name="interface_settings_title">界面设置</string>
+    <string name="interface_settings_category_fonts">字体</string>
+    <string name="custom_font_title">自定义字体</string>
+    <string name="custom_font_summary_default">系统默认</string>
+    <string name="custom_font_summary_active">当前：%1$s</string>
+    <string name="custom_font_restore_title">恢复默认字体</string>
+    <string name="custom_font_restore_summary">移除已导入的系统字体</string>
+    <string name="custom_font_file_invalid">请选择 TTF 字体文件</string>
+    <string name="custom_font_apply_success">字体已应用</string>
+    <string name="custom_font_restore_success">已恢复默认字体</string>
+    <string name="custom_font_apply_failed">无法应用字体（错误 %1$d）</string>
+    <string name="custom_font_footer">新启动的应用会使用此字体。重启设备后可更新所有界面。</string>
+    <string name="external_desktop_title">外接屏桌面</string>
+    <string name="external_desktop_description">通过 USB-C、HDMI 或受支持的虚拟屏使用系统桌面界面</string>
+    <string name="external_desktop_enable_title">启用外接屏桌面</string>
+    <string name="external_desktop_behavior_category">连接设备</string>
+    <string name="external_desktop_blank_internal_title">遮盖本机屏幕</string>
+    <string name="external_desktop_blank_internal_summary">外接桌面运行时，在本机显示黑色连接提示界面</string>
+    <string name="external_desktop_allow_scrcpy_title">允许 scrcpy 虚拟屏</string>
+    <string name="external_desktop_allow_scrcpy_summary">允许 scrcpy --new-display 创建的屏幕进入桌面模式</string>
+    <string name="external_desktop_footer">键盘和鼠标会自动指向外接桌面。断开外接显示器后返回本机。</string>
 
     <string name="quick_settings_title">快捷设置</string>
     <string name="quick_settings_style_category">快捷设置</string>
