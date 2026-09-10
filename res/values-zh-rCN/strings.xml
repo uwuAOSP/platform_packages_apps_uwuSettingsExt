@@ -61,6 +61,12 @@
     <string name="background_ignore_task_removal">忽略启动器任务卡移除</string>
     <string name="background_ignore_task_removal_summary">从最近任务划掉时保留已管理应用的任务、页面状态和进程</string>
     <string name="background_setting_update_failed">无法更新后台管理设置</string>
+    <string name="background_freezer_backend_title">墓碑冻结后端</string>
+    <string name="background_freezer_backend_auto">自动判定</string>
+    <string name="background_freezer_backend_cgroup1">CGroup1</string>
+    <string name="background_freezer_backend_cgroup2">CGroup2</string>
+    <string name="background_freezer_backend_hybrid">混合</string>
+    <string name="background_freezer_backend_unavailable">不可用</string>
     <string name="sensor_policy_title">应用传感器访问</string>
     <string name="sensor_policy_apps_category">应用</string>
     <string name="sensor_policy_app_policy">传感器策略</string>
@@ -74,6 +80,12 @@
     <string name="sensor_policy_retry">重试</string>
     <string name="sensor_policy_update_failed">无法更新传感器策略</string>
     <string name="background_diagnostics_category">诊断</string>
+    <string name="background_kernel_status_title">内核冻结状态</string>
+    <string name="background_kernel_status_summary">CGroup：%1$s · Binder：%2$s · 状态：%3$s</string>
+    <string name="background_status_available">可用</string>
+    <string name="background_status_unavailable">不可用</string>
+    <string name="background_status_readable">可读取</string>
+    <string name="background_status_restricted">受限</string>
     <string name="background_export_logs">导出日志</string>
     <string name="background_log_exported">日志已导出</string>
     <string name="background_log_export_failed">无法导出日志</string>

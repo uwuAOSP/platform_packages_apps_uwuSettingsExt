@@ -61,6 +61,12 @@
     <string name="background_ignore_task_removal">Ignore launcher task removal</string>
     <string name="background_ignore_task_removal_summary">Keep managed app tasks, UI state, and processes when dismissed from recents</string>
     <string name="background_setting_update_failed">Could not update background setting</string>
+    <string name="background_freezer_backend_title">Tombstone freezer backend</string>
+    <string name="background_freezer_backend_auto">Automatic</string>
+    <string name="background_freezer_backend_cgroup1">CGroup1</string>
+    <string name="background_freezer_backend_cgroup2">CGroup2</string>
+    <string name="background_freezer_backend_hybrid">Hybrid</string>
+    <string name="background_freezer_backend_unavailable">Unavailable</string>
     <string name="sensor_policy_title">App sensor access</string>
     <string name="sensor_policy_apps_category">Apps</string>
     <string name="sensor_policy_app_policy">Sensor policy</string>
@@ -74,6 +80,12 @@
     <string name="sensor_policy_retry">Retry</string>
     <string name="sensor_policy_update_failed">Could not update sensor policy</string>
     <string name="background_diagnostics_category">Diagnostics</string>
+    <string name="background_kernel_status_title">Kernel freezer status</string>
+    <string name="background_kernel_status_summary">CGroup: %1$s · Binder: %2$s · stats: %3$s</string>
+    <string name="background_status_available">available</string>
+    <string name="background_status_unavailable">unavailable</string>
+    <string name="background_status_readable">readable</string>
+    <string name="background_status_restricted">restricted</string>
     <string name="background_export_logs">Export logs</string>
     <string name="background_log_exported">Log exported</string>
     <string name="background_log_export_failed">Could not export log</string>
