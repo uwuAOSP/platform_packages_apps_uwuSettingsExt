@@ -61,6 +61,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -338,11 +339,12 @@ private fun AppModePreferenceRow(
 }
 
 @Composable
-private fun ExpressiveModeMenuItem(
+internal fun ExpressiveModeMenuItem(
     text: String,
     selected: Boolean,
     position: Int,
     itemCount: Int,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     val shape = if (selected) {
@@ -374,6 +376,7 @@ private fun ExpressiveModeMenuItem(
         modifier = Modifier
             .padding(horizontal = 4.dp, vertical = 1.dp)
             .fillMaxWidth()
+            .alpha(if (enabled) 1f else 0.38f)
             .clip(shape)
             .background(
                 if (selected) {
@@ -384,6 +387,7 @@ private fun ExpressiveModeMenuItem(
             )
             .selectable(
                 selected = selected,
+                enabled = enabled,
                 role = Role.RadioButton,
                 onClick = onClick,
             )
