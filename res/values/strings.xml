@@ -39,6 +39,12 @@
     <string name="custom_font_restore_success">Default font restored</string>
     <string name="custom_font_apply_failed">Could not apply font (error %1$d)</string>
     <string name="custom_font_footer">The font is applied to newly started apps. Restart the device to update every screen.</string>
+    <string name="interface_settings_category_icons">System icons</string>
+    <string name="system_small_icons_title">System small icons</string>
+    <string name="system_small_icons_summary">Customize system small icons</string>
+    <string name="system_small_icons_default">Default</string>
+    <string name="system_small_icons_pui">PUI</string>
+    <string name="system_small_icons_update_failed">Could not update system small icons</string>
     <string name="external_desktop_title">External display desktop</string>
     <string name="external_desktop_description">Use the system desktop interface on USB-C, HDMI, and supported virtual displays</string>
     <string name="external_desktop_enable_title">Use external display desktop</string>
