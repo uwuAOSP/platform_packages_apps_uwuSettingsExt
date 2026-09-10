@@ -24,8 +24,8 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
-    <uses-permission android:name="android.permission.UPDATE_FONTS" />
     <uses-permission android:name="android.permission.CHANGE_OVERLAY_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_FONTS" />
 
     <application
         android:allowBackup="false"
@@ -44,6 +44,11 @@
             android:name=".interfaceui.InterfaceSettingsActivity"
             android:exported="false"
             android:label="@string/interface_settings_title" />
+
+        <activity
+            android:name=".interfaceui.CustomFontActivity"
+            android:exported="false"
+            android:label="@string/custom_font_page_title" />
 
         <activity
             android:name=".externaldesktop.ExternalDesktopSettingsActivity"
