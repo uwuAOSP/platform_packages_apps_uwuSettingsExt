@@ -17,6 +17,7 @@
 <permissions>
     <privapp-permissions package="org.uwuaosp.settingsext">
         <permission name="android.permission.ACCESS_SHORTCUTS" />
+        <permission name="android.permission.CHANGE_OVERLAY_PACKAGES" />
         <permission name="android.permission.PACKAGE_USAGE_STATS" />
         <permission name="android.permission.READ_LOGS" />
         <permission name="android.permission.UPDATE_FONTS" />

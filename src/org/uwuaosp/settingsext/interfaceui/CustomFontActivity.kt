@@ -271,6 +271,8 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                                 operationRunning = false
                                 if (result == FontManager.RESULT_SUCCESS) {
                                     activeFont = null
+                                    fonts = emptyList()
+                                    selectedId = null
                                     showToast(context, R.string.custom_font_restore_success)
                                 } else {
                                     Toast.makeText(
@@ -320,6 +322,16 @@ private fun FontPreviewCard(font: FontCandidate?) {
             )
             Text(
                 text = stringResource(R.string.custom_font_preview_supporting_text),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontFamily),
+            )
+            Text(
+                text = stringResource(R.string.custom_font_preview_digits),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontFamily),
+            )
+            Text(
+                text = stringResource(R.string.custom_font_preview_japanese),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium.copy(fontFamily = fontFamily),
             )

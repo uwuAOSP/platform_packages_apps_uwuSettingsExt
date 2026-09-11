@@ -42,8 +42,10 @@
     <string name="custom_font_style_normal">Normal</string>
     <string name="custom_font_style_italic">Italic</string>
     <string name="custom_font_preview_default">System default preview</string>
-    <string name="custom_font_preview_text">The old man is dreaming of lions.</string>
-    <string name="custom_font_preview_supporting_text">The quick brown fox jumps over the lazy dog.</string>
+    <string name="custom_font_preview_text">An old man is dreaming of lions.</string>
+    <string name="custom_font_preview_supporting_text" translatable="false">The quick brown fox jumps over the lazy dog.</string>
+    <string name="custom_font_preview_digits" translatable="false">0123456789</string>
+    <string name="custom_font_preview_japanese" translatable="false">いろはにほへと ちりぬるを</string>
     <string name="custom_font_apply_action">Apply selected font</string>
     <string name="custom_font_empty_summary">Import a font file or archive to preview its available fonts.</string>
     <string name="custom_font_restore_title">Restore default font</string>
@@ -125,12 +127,6 @@
     <string name="sensor_policy_retry">Retry</string>
     <string name="sensor_policy_update_failed">Could not update sensor policy</string>
     <string name="background_diagnostics_category">Diagnostics</string>
-    <string name="background_kernel_status_title">Kernel freezer status</string>
-    <string name="background_kernel_status_summary">CGroup: %1$s · Binder: %2$s · stats: %3$s</string>
-    <string name="background_status_available">available</string>
-    <string name="background_status_unavailable">unavailable</string>
-    <string name="background_status_readable">readable</string>
-    <string name="background_status_restricted">restricted</string>
     <string name="background_export_logs">Export logs</string>
     <string name="background_log_exported">Log exported</string>
     <string name="background_log_export_failed">Could not export log</string>
