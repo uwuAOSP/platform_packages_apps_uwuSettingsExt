@@ -238,30 +238,11 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         SettingsCategory(title = stringResource(R.string.background_diagnostics_category))
         PreferenceRow(
-            title = stringResource(R.string.background_kernel_status_title),
-            summary = stringResource(
-                R.string.background_kernel_status_summary,
-                freezerBackendLabel(kernelStatus.automaticBackend),
-                if (kernelStatus.binderDevice) {
-                    stringResource(R.string.background_status_available)
-                } else {
-                    stringResource(R.string.background_status_unavailable)
-                },
-                if (kernelStatus.binderStatsReadable) {
-                    stringResource(R.string.background_status_readable)
-                } else {
-                    stringResource(R.string.background_status_restricted)
-                },
-            ),
-            position = PreferencePosition.Top,
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
             title = stringResource(R.string.background_export_logs),
             summary = "",
             showSummary = false,
             enabled = !exporting,
-            position = PreferencePosition.Bottom,
+            position = PreferencePosition.Single,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_background_log_description)
             },
