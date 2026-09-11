@@ -39,7 +39,7 @@ import java.util.zip.ZipInputStream
 internal class CustomFontController(private val context: Context) {
     private val fontManager = context.getSystemService(FontManager::class.java)
     private val preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
-    private val importDirectory = File(context.cacheDir, IMPORT_DIRECTORY)
+    private val importDirectory = File(context.filesDir, IMPORT_DIRECTORY)
 
     fun activeFontName(): String? {
         val postScriptName = fontManager.getCustomFontName() ?: return null
@@ -60,29 +60,47 @@ internal class CustomFontController(private val context: Context) {
 
     fun prepare(uri: Uri): FontImportResult {
         val sourceName = displayName(uri)
+        val createdFiles = mutableListOf<File>()
         return try {
-            resetImportDirectory()
+            ensureImportDirectory()
+            val existingFiles = storedFontFiles()
+            val existingBytes = existingFiles.sumOf(File::length)
             context.contentResolver.openInputStream(uri)?.use { rawInput ->
                 val input = BufferedInputStream(rawInput)
                 if (isZip(input, sourceName)) {
-                    extractArchive(input)
+                    extractArchive(
+                        input,
+                        createdFiles,
+                        existingFiles.size,
+                        existingBytes,
+                    )
                 } else {
                     val extension =
                         fontExtension(input, sourceName) ?: return FontImportResult.UnsupportedFile
-                    copyFont(input, sourceName, extension)
+                    if (existingFiles.size >= MAX_FONT_FILES) throw ImportLimitException()
+                    val destination = uniqueDestination(sourceName, extension)
+                    createdFiles += destination
+                    val copied = copyLimited(input, destination, MAX_FONT_BYTES)
+                    if (existingBytes + copied > MAX_TOTAL_FONT_BYTES) {
+                        throw ImportLimitException()
+                    }
                 }
             } ?: return FontImportResult.Failed
 
+            val importedFonts = createdFiles.mapNotNull(::inspectFont)
+            val validFiles = importedFonts.mapTo(mutableSetOf()) { it.file }
+            createdFiles.filterNot(validFiles::contains).forEach(File::delete)
+            if (importedFonts.isEmpty()) return FontImportResult.NoFonts
             val fonts = preparedFonts()
-            if (fonts.isEmpty()) FontImportResult.NoFonts else FontImportResult.Success(fonts)
+            FontImportResult.Success(fonts)
         } catch (_: ImportLimitException) {
-            discardImportedFonts()
+            discardFiles(createdFiles)
             FontImportResult.TooLarge
         } catch (_: ZipException) {
-            discardImportedFonts()
+            discardFiles(createdFiles)
             FontImportResult.InvalidArchive
         } catch (_: IOException) {
-            discardImportedFonts()
+            discardFiles(createdFiles)
             FontImportResult.Failed
         }
     }
@@ -103,33 +121,36 @@ internal class CustomFontController(private val context: Context) {
         val result = fontManager.clearCustomFont()
         if (result == FontManager.RESULT_SUCCESS) {
             preferences.edit().remove(KEY_DISPLAY_NAME).apply()
+            discardImportedFonts()
         }
         return result
     }
 
-    private fun extractArchive(input: InputStream) {
+    private fun extractArchive(
+        input: InputStream,
+        createdFiles: MutableList<File>,
+        existingCount: Int,
+        existingBytes: Long,
+    ) {
         ZipInputStream(input).use { zip ->
             var entryCount = 0
             var fontCount = 0
-            var totalBytes = 0L
+            var totalBytes = existingBytes
             while (true) {
                 val entry = zip.nextEntry ?: break
                 entryCount++
                 if (entryCount > MAX_ARCHIVE_ENTRIES) throw ImportLimitException()
                 if (!entry.isDirectory && isSupportedFontName(entry.name)) {
                     fontCount++
-                    if (fontCount > MAX_FONT_FILES) throw ImportLimitException()
+                    if (existingCount + fontCount > MAX_FONT_FILES) throw ImportLimitException()
                     val destination = uniqueDestination(File(entry.name).name)
+                    createdFiles += destination
                     totalBytes += copyLimited(zip, destination, MAX_FONT_BYTES)
                     if (totalBytes > MAX_TOTAL_FONT_BYTES) throw ImportLimitException()
                 }
                 zip.closeEntry()
             }
         }
-    }
-
-    private fun copyFont(input: InputStream, sourceName: String, extension: String) {
-        copyLimited(input, uniqueDestination(sourceName, extension), MAX_FONT_BYTES)
     }
 
     private fun copyLimited(input: InputStream, destination: File, byteLimit: Long): Long {
@@ -218,17 +239,29 @@ internal class CustomFontController(private val context: Context) {
         return destination
     }
 
-    private fun resetImportDirectory() {
-        if (importDirectory.exists() && !importDirectory.deleteRecursively()) {
-            throw IOException("Unable to clear font import directory")
-        }
+    private fun ensureImportDirectory() {
         if (!importDirectory.mkdirs() && !importDirectory.isDirectory) {
             throw IOException("Unable to create font import directory")
         }
     }
 
     private fun discardImportedFonts() {
-        runCatching { resetImportDirectory() }
+        runCatching {
+            if (importDirectory.exists() && !importDirectory.deleteRecursively()) {
+                throw IOException("Unable to clear font import directory")
+            }
+        }
+    }
+
+    private fun discardFiles(files: Iterable<File>) {
+        files.forEach { runCatching { it.delete() } }
+    }
+
+    private fun storedFontFiles(): List<File> {
+        return importDirectory
+            .listFiles()
+            .orEmpty()
+            .filter { it.isFile && isSupportedFontName(it.name) }
     }
 
     private fun displayName(uri: Uri): String {
@@ -263,7 +296,7 @@ internal class CustomFontController(private val context: Context) {
     private companion object {
         const val PREFERENCES = "custom_font"
         const val KEY_DISPLAY_NAME = "display_name"
-        const val IMPORT_DIRECTORY = "custom_font_import"
+        const val IMPORT_DIRECTORY = "CustomTTF"
         const val MAX_ARCHIVE_ENTRIES = 256
         const val MAX_FONT_FILES = 128
         const val MAX_FILE_NAME_LENGTH = 96
