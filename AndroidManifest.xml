@@ -66,6 +66,11 @@
             android:label="@string/sensor_policy_title" />
 
         <activity
+            android:name=".clipboard.ClipboardPolicyActivity"
+            android:exported="false"
+            android:label="@string/clipboard_policy_title" />
+
+        <activity
             android:name=".qs.QuickSettingsActivity"
             android:exported="false"
             android:label="@string/quick_settings_title" />
