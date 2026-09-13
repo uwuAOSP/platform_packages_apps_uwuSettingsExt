@@ -57,7 +57,16 @@
     <string name="custom_font_import_failed">Could not import this file</string>
     <string name="custom_font_apply_success">Font applied</string>
     <string name="custom_font_restore_success">Default font restored</string>
-    <string name="custom_font_apply_failed">Could not apply font (error %1$d)</string>
+    <string name="custom_font_error_storage">The font could not be saved. Check available storage and try again.</string>
+    <string name="custom_font_error_verification">The font failed system integrity verification.</string>
+    <string name="custom_font_error_invalid_file">This is not a valid OpenType font file.</string>
+    <string name="custom_font_error_invalid_name">The font does not contain a valid internal name.</string>
+    <string name="custom_font_error_older_version">An older font version cannot replace the installed version.</string>
+    <string name="custom_font_error_update_config">The system font configuration could not be updated.</string>
+    <string name="custom_font_error_unsupported">Custom fonts are not supported by this kernel.</string>
+    <string name="custom_font_error_version_changed">The font configuration changed. Try again.</string>
+    <string name="custom_font_error_not_found">The selected font file no longer exists.</string>
+    <string name="custom_font_error_rejected">The system rejected this font.</string>
     <string name="custom_font_footer">The font is applied to newly started apps. Restart the device to update every screen.</string>
     <string name="interface_settings_category_icons">System icons</string>
     <string name="system_small_icons_title">System small icons</string>
