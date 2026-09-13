@@ -64,6 +64,7 @@ import org.uwuaosp.compose.settingslib.rememberSettingsTypography
 import org.uwuaosp.settingsext.attestation.KeyAttestationSettingsActivity
 import org.uwuaosp.settingsext.appjump.AppJumpSettingsActivity
 import org.uwuaosp.settingsext.background.BackgroundManagementActivity
+import org.uwuaosp.settingsext.clipboard.ClipboardPolicyActivity
 import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSecureSettings
 import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSettingsActivity
 import org.uwuaosp.settingsext.interfaceui.InterfaceSettingsActivity
@@ -337,9 +338,22 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_appjump)
             },
-            position = PreferencePosition.Bottom,
+            position = PreferencePosition.Middle,
             onClick = {
                 context.startActivity(AppJumpSettingsActivity.createIntent(context))
+            },
+        )
+        PreferenceGroupSpacer()
+        PreferenceRow(
+            title = stringResource(R.string.clipboard_policy_title),
+            summary = "",
+            showSummary = false,
+            iconContent = {
+                SettingsHomepageIcon(iconRes = R.drawable.ic_clipboard_policy)
+            },
+            position = PreferencePosition.Bottom,
+            onClick = {
+                context.startActivity(Intent(context, ClipboardPolicyActivity::class.java))
             },
         )
 
