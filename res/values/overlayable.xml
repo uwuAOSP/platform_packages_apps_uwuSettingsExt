@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <overlayable name="uwuSettingsExtTranslations">
+        <policy type="signature">
+            <item type="string" name="clipboard_policy_title" />
+            <item type="string" name="clipboard_policy_apps_category" />
+            <item type="string" name="clipboard_policy_app_policy" />
+            <item type="string" name="clipboard_policy_allow" />
+            <item type="string" name="clipboard_policy_ask" />
+            <item type="string" name="clipboard_policy_deny" />
+            <item type="string" name="clipboard_policy_search_apps" />
+            <item type="string" name="clipboard_policy_search_close" />
+            <item type="string" name="clipboard_policy_no_apps" />
+            <item type="string" name="clipboard_policy_load_failed" />
+            <item type="string" name="clipboard_policy_retry" />
+            <item type="string" name="clipboard_policy_update_failed" />
+        </policy>
+    </overlayable>
+</resources>
