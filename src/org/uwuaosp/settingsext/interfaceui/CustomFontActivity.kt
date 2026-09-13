@@ -222,15 +222,10 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                                         showToast(context, R.string.custom_font_apply_success)
                                     }
                                     is FontOperationResult.Failed ->
-                                        Toast.makeText(
-                                                context,
-                                                context.getString(
-                                                    R.string.custom_font_apply_failed,
-                                                    result.errorCode,
-                                                ),
-                                                Toast.LENGTH_LONG,
-                                            )
-                                            .show()
+                                        showErrorToast(
+                                            context,
+                                            fontOperationErrorMessage(result.errorCode),
+                                        )
                                     FontOperationResult.InvalidFile ->
                                         showToast(context, R.string.custom_font_file_invalid)
                                 }
@@ -275,15 +270,7 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                                     selectedId = null
                                     showToast(context, R.string.custom_font_restore_success)
                                 } else {
-                                    Toast.makeText(
-                                            context,
-                                            context.getString(
-                                                R.string.custom_font_apply_failed,
-                                                result,
-                                            ),
-                                            Toast.LENGTH_LONG,
-                                        )
-                                        .show()
+                                    showErrorToast(context, fontOperationErrorMessage(result))
                                 }
                             }
                         },
@@ -341,6 +328,34 @@ private fun FontPreviewCard(font: FontCandidate?) {
 
 private fun showToast(context: Context, message: Int) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+private fun showErrorToast(context: Context, message: Int) {
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+}
+
+private fun fontOperationErrorMessage(errorCode: Int): Int {
+    return when (errorCode) {
+        FontManager.RESULT_ERROR_FAILED_TO_WRITE_FONT_FILE ->
+            R.string.custom_font_error_storage
+        FontManager.RESULT_ERROR_VERIFICATION_FAILURE ->
+            R.string.custom_font_error_verification
+        FontManager.RESULT_ERROR_INVALID_FONT_FILE ->
+            R.string.custom_font_error_invalid_file
+        FontManager.RESULT_ERROR_INVALID_FONT_NAME ->
+            R.string.custom_font_error_invalid_name
+        FontManager.RESULT_ERROR_DOWNGRADING ->
+            R.string.custom_font_error_older_version
+        FontManager.RESULT_ERROR_FAILED_UPDATE_CONFIG ->
+            R.string.custom_font_error_update_config
+        FontManager.RESULT_ERROR_FONT_UPDATER_DISABLED ->
+            R.string.custom_font_error_unsupported
+        FontManager.RESULT_ERROR_VERSION_MISMATCH ->
+            R.string.custom_font_error_version_changed
+        FontManager.RESULT_ERROR_FONT_NOT_FOUND ->
+            R.string.custom_font_error_not_found
+        else -> R.string.custom_font_error_rejected
+    }
 }
 
 private val FONT_MIME_TYPES =
