@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.uwuaosp.compose.settingslib.MainSwitchPreference
+import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
 import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
@@ -80,6 +81,7 @@ private fun ExternalDesktopSettingsScreen(onNavigateUp: () -> Unit) {
                 ExternalDesktopSecureSettings.setBlankInternalDisplay(context, value)
             },
         )
+        PreferenceGroupSpacer()
         SwitchPreferenceRow(
             title = stringResource(R.string.external_desktop_allow_scrcpy_title),
             summary = stringResource(R.string.external_desktop_allow_scrcpy_summary),
