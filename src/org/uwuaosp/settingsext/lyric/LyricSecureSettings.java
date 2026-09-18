@@ -21,8 +21,6 @@ import android.provider.Settings;
 
 import org.uwuaosp.settingsext.util.SettingsUtils;
 
-import java.util.List;
-
 public final class LyricSecureSettings {
     public static final int POSITION_OVERLAY = 0;
     public static final int POSITION_CLOCK_RIGHT = 1;
@@ -62,17 +60,14 @@ public final class LyricSecureSettings {
         return SettingsUtils.getSecureBoolean(context, Settings.Secure.STATUS_BAR_LYRIC_HIDE_ICON_CLOCK_RIGHT, defaultValue);
     }
 
-    public static void setAllowedPackages(Context context, List<String> packages) {
-        SettingsUtils.putSecureString(context, Settings.Secure.STATUS_BAR_LYRIC_ALLOWED_PACKAGES,
-                SettingsUtils.joinList(packages, ";"));
+    public static void setSources(Context context, String sources) {
+        SettingsUtils.putSecureString(context, Settings.Secure.STATUS_BAR_LYRIC_SOURCES,
+                sources == null ? "" : sources.trim());
     }
 
-    public static List<String> getAllowedPackages(Context context) {
-        return SettingsUtils.splitList(SettingsUtils.getSecureString(
-                context, Settings.Secure.STATUS_BAR_LYRIC_ALLOWED_PACKAGES), ";");
-    }
-
-    public static String getAllowedPackagesKey() {
-        return Settings.Secure.STATUS_BAR_LYRIC_ALLOWED_PACKAGES;
+    public static String getSources(Context context) {
+        String sources = SettingsUtils.getSecureString(
+                context, Settings.Secure.STATUS_BAR_LYRIC_SOURCES);
+        return sources == null ? "" : sources;
     }
 }

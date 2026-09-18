@@ -50,7 +50,6 @@ import org.uwuaosp.compose.settingslib.preferencePosition
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.attestation.KeyAttestationSecureSettings
-import org.uwuaosp.settingsext.lyric.LyricSecureSettings
 import org.uwuaosp.settingsext.smartsuggestions.SmartSuggestionsSecureSettings
 
 class AppSelectionActivity : ComponentActivity() {
@@ -59,7 +58,6 @@ class AppSelectionActivity : ComponentActivity() {
         const val EXTRA_INITIAL_PACKAGE = "initial_package"
         const val EXTRA_RESULT_PACKAGE = "result_package"
         const val EXTRA_RESULT_LABEL = "result_label"
-        const val SELECTION_MODE_LYRIC_WHITELIST = "lyric_whitelist"
         const val SELECTION_MODE_KEYBOX_EXCLUSION = "keybox_exclusion"
         const val SELECTION_MODE_MUSIC_SUGGESTION = "music_suggestion"
         const val SELECTION_MODE_SINGLE_APP = "single_app"
@@ -112,15 +110,11 @@ private fun AppSelectionScreen(
     onSingleAppSelected: (AppPickerEntry) -> Unit,
 ) {
     val context = LocalContext.current
-    val multiple =
-        mode == AppSelectionActivity.SELECTION_MODE_LYRIC_WHITELIST ||
-            mode == AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION
+    val multiple = mode == AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION
     var apps by remember { mutableStateOf<List<AppPickerEntry>>(emptyList()) }
     var selectedPackages by remember {
         mutableStateOf(
             when (mode) {
-                AppSelectionActivity.SELECTION_MODE_LYRIC_WHITELIST ->
-                    LyricSecureSettings.getAllowedPackages(context).toSet()
                 AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
                     KeyAttestationSecureSettings.getExcludedPackages(context).toSet()
                 AppSelectionActivity.SELECTION_MODE_MUSIC_SUGGESTION ->
@@ -183,8 +177,6 @@ private fun AppSelectionScreen(
         }
     val title =
         when (mode) {
-            AppSelectionActivity.SELECTION_MODE_LYRIC_WHITELIST ->
-                stringResource(R.string.lyric_whitelist_title)
             AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
                 stringResource(R.string.key_attestation_excluded_apps_title)
             AppSelectionActivity.SELECTION_MODE_MUSIC_SUGGESTION ->
@@ -252,8 +244,6 @@ private fun AppSelectionScreen(
 
 private fun saveMultipleSelection(context: Context, mode: String, packages: Set<String>) {
     when (mode) {
-        AppSelectionActivity.SELECTION_MODE_LYRIC_WHITELIST ->
-            LyricSecureSettings.setAllowedPackages(context, packages.toList())
         AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
             KeyAttestationSecureSettings.setExcludedPackages(context, packages.toList())
     }
