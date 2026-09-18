@@ -276,9 +276,9 @@
     <string name="app_picker_title">选择应用</string>
 
     <string name="lyric_settings_title">状态栏歌词</string>
-    <string name="lyric_settings_description">在状态栏中显示允许的音乐应用提供的歌词，并选择歌词显示位置和可提供歌词的应用</string>
+    <string name="lyric_settings_description">根据当前媒体会话在状态栏中显示同步歌词</string>
     <string name="lyric_settings_section_behavior">行为</string>
-    <string name="lyric_settings_section_apps">应用</string>
+    <string name="lyric_settings_section_sources">歌词源</string>
     <string name="lyric_position_title">显示位置</string>
     <string name="lyric_position_entry_overlay">替换左侧状态栏内容</string>
     <string name="lyric_position_entry_clock_right">显示在时钟右侧</string>
@@ -288,11 +288,13 @@
     <string name="lyric_show_translation_summary">有翻译歌词时一并显示</string>
     <string name="lyric_hide_icon_clock_right_title">隐藏音乐应用图标</string>
     <string name="lyric_hide_icon_clock_right_summary">在时钟右侧显示歌词时隐藏音乐应用图标</string>
-    <string name="lyric_notification_listener_title">通知使用权限</string>
-    <string name="lyric_notification_listener_summary_on">已允许</string>
-    <string name="lyric_notification_listener_summary_off">点击前往授权</string>
-    <string name="lyric_whitelist_title">白名单应用</string>
-    <string name="lyric_whitelist_summary_empty">未允许任何应用</string>
+    <string name="lyric_sources_title">自定义歌词源</string>
+    <string name="lyric_sources_summary_default">使用内置网易云歌词源</string>
+    <string name="lyric_sources_summary_configured">使用已配置的 HTTPS 歌词源</string>
+    <string name="lyric_sources_dialog_title">配置歌词源</string>
+    <string name="lyric_sources_dialog_label">歌词源 URL</string>
+    <string name="lyric_sources_dialog_hint">https://example.com/api;https://mirror.example/api</string>
+    <string name="lyric_sources_dialog_save">保存</string>
 
     <string name="app_jump_settings_title">应用跳转权限</string>
     <string name="app_jump_detail_title">应用跳转权限</string>
@@ -400,9 +402,6 @@
     <string name="key_attestation_pif_security_patch_value">Security patch: %1$s</string>
     <string name="key_attestation_pif_fingerprint_value">Fingerprint: %1$s</string>
 
-    <plurals name="lyric_whitelist_summary_count">
-        <item quantity="other">已选择 %d 个应用</item>
-    </plurals>
     <plurals name="key_attestation_excluded_apps_count">
         <item quantity="other">已排除 %d 个应用</item>
     </plurals>

@@ -16,10 +16,7 @@
 
 package org.uwuaosp.settingsext.lyric
 
-import android.content.ComponentName
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -46,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -58,9 +54,9 @@ import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.compose.settingslib.SettingsTopIntro
 import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
+import org.uwuaosp.compose.settingslib.TextInputPreferenceDialog
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
-import org.uwuaosp.settingsext.apppicker.AppSelectionActivity
 
 class LyricSettingsActivity : ComponentActivity() {
     private val refreshToken = mutableIntStateOf(0)
@@ -101,13 +97,11 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
     var hideClockRightIcon by remember(refreshToken) {
         mutableStateOf(LyricSecureSettings.isHideIconOnClockRightEnabled(context, false))
     }
+    var sources by remember(refreshToken) {
+        mutableStateOf(LyricSecureSettings.getSources(context))
+    }
     var showPositionDialog by remember { mutableStateOf(false) }
-    val allowedPackageCount = remember(refreshToken) {
-        LyricSecureSettings.getAllowedPackages(context).size
-    }
-    val notificationAccessGranted = remember(refreshToken) {
-        isNotificationListenerEnabled(context)
-    }
+    var showSourcesDialog by remember { mutableStateOf(false) }
 
     SettingsScaffold(
         title = stringResource(R.string.lyric_settings_title),
@@ -166,44 +160,18 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                 LyricSecureSettings.setHideIconOnClockRight(context, value)
             },
         )
-        PreferenceGroupSpacer()
-        PreferenceRow(
-            title = stringResource(R.string.lyric_notification_listener_title),
-            summary = stringResource(
-                if (notificationAccessGranted) {
-                    R.string.lyric_notification_listener_summary_on
-                } else {
-                    R.string.lyric_notification_listener_summary_off
-                },
-            ),
-            enabled = enabled,
-            position = PreferencePosition.Bottom,
-            onClick = {
-                context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-            },
-        )
-
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.lyric_settings_section_apps))
+        SettingsCategory(title = stringResource(R.string.lyric_settings_section_sources))
         PreferenceRow(
-            title = stringResource(R.string.lyric_whitelist_title),
-            summary = if (allowedPackageCount == 0) {
-                stringResource(R.string.lyric_whitelist_summary_empty)
+            title = stringResource(R.string.lyric_sources_title),
+            summary = if (sources.isBlank()) {
+                stringResource(R.string.lyric_sources_summary_default)
             } else {
-                pluralStringResource(
-                    R.plurals.lyric_whitelist_summary_count,
-                    allowedPackageCount,
-                    allowedPackageCount,
-                )
+                stringResource(R.string.lyric_sources_summary_configured)
             },
             enabled = enabled,
             onClick = {
-                context.startActivity(
-                    Intent(context, AppSelectionActivity::class.java).putExtra(
-                        AppSelectionActivity.EXTRA_SELECTION_MODE,
-                        AppSelectionActivity.SELECTION_MODE_LYRIC_WHITELIST,
-                    ),
-                )
+                showSourcesDialog = true
             },
         )
     }
@@ -217,6 +185,21 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                 showPositionDialog = false
             },
             onDismiss = { showPositionDialog = false },
+        )
+    }
+    if (showSourcesDialog) {
+        TextInputPreferenceDialog(
+            title = stringResource(R.string.lyric_sources_dialog_title),
+            value = sources,
+            confirmText = stringResource(R.string.lyric_sources_dialog_save),
+            dismissText = stringResource(android.R.string.cancel),
+            singleLine = false,
+            onConfirm = { value ->
+                sources = value.trim()
+                LyricSecureSettings.setSources(context, sources)
+                showSourcesDialog = false
+            },
+            onDismissRequest = { showSourcesDialog = false },
         )
     }
 }
@@ -270,16 +253,5 @@ private fun LyricPositionOption(title: String, selected: Boolean, onClick: () ->
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 16.dp),
         )
-    }
-}
-
-private fun isNotificationListenerEnabled(context: android.content.Context): Boolean {
-    val listeners = Settings.Secure.getString(
-        context.contentResolver,
-        Settings.Secure.ENABLED_NOTIFICATION_LISTENERS,
-    ).orEmpty()
-    return listeners.split(':').any { flattenedName ->
-        ComponentName.unflattenFromString(flattenedName)?.packageName ==
-            "cn.binbin323.statuslyricext"
     }
 }

@@ -282,9 +282,9 @@
     <string name="app_picker_title">Choose app</string>
 
     <string name="lyric_settings_title">Status Bar Lyric</string>
-    <string name="lyric_settings_description">Show lyrics from allowed music apps in the status bar; choose where lyrics appear and which apps can provide them</string>
+    <string name="lyric_settings_description">Show synchronized lyrics from the current media session in the status bar</string>
     <string name="lyric_settings_section_behavior">Behavior</string>
-    <string name="lyric_settings_section_apps">Apps</string>
+    <string name="lyric_settings_section_sources">Lyric Sources</string>
     <string name="lyric_position_title">Display Position</string>
     <string name="lyric_position_entry_overlay">Replace start-side content</string>
     <string name="lyric_position_entry_clock_right">Right of clock</string>
@@ -294,11 +294,13 @@
     <string name="lyric_show_translation_summary">Show translated lyric lines when available</string>
     <string name="lyric_hide_icon_clock_right_title">Hide Music App Icon</string>
     <string name="lyric_hide_icon_clock_right_summary">Hide the music app icon when showing lyrics to the right of the clock</string>
-    <string name="lyric_notification_listener_title">Notification Access</string>
-    <string name="lyric_notification_listener_summary_on">Allowed</string>
-    <string name="lyric_notification_listener_summary_off">Tap to grant access</string>
-    <string name="lyric_whitelist_title">Allowed Apps</string>
-    <string name="lyric_whitelist_summary_empty">No apps allowed</string>
+    <string name="lyric_sources_title">Custom Sources</string>
+    <string name="lyric_sources_summary_default">Using the built-in NetEase source</string>
+    <string name="lyric_sources_summary_configured">Using configured HTTPS sources</string>
+    <string name="lyric_sources_dialog_title">Configure Lyric Sources</string>
+    <string name="lyric_sources_dialog_label">Source URLs</string>
+    <string name="lyric_sources_dialog_hint">https://example.com/api;https://mirror.example/api</string>
+    <string name="lyric_sources_dialog_save">Save</string>
 
     <string name="app_jump_settings_title">App Jump Permissions</string>
     <string name="app_jump_detail_title">App jump permission</string>
@@ -406,10 +408,6 @@
     <string name="key_attestation_pif_security_patch_value">Security patch: %1$s</string>
     <string name="key_attestation_pif_fingerprint_value">Fingerprint: %1$s</string>
 
-    <plurals name="lyric_whitelist_summary_count">
-        <item quantity="one">%d allowed app</item>
-        <item quantity="other">%d allowed apps</item>
-    </plurals>
     <plurals name="key_attestation_excluded_apps_count">
         <item quantity="one">%d excluded app</item>
         <item quantity="other">%d excluded apps</item>
