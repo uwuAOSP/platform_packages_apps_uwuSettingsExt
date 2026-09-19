@@ -98,7 +98,7 @@ class QuickSettingsActivity : ComponentActivity() {
             observer,
         )
         contentResolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.QS_UI_STYLE_APPLIED),
+            Settings.Secure.getUriFor(QS_UI_STYLE_APPLIED_KEY),
             false,
             observer,
         )
@@ -118,7 +118,7 @@ class QuickSettingsActivity : ComponentActivity() {
         ).coerceIn(STYLE_UWU, STYLE_A16)
         appliedStyle.intValue = Settings.Secure.getInt(
             contentResolver,
-            Settings.Secure.QS_UI_STYLE_APPLIED,
+            QS_UI_STYLE_APPLIED_KEY,
             STYLE_A16,
         ).coerceIn(STYLE_UWU, STYLE_A16)
     }
@@ -296,3 +296,4 @@ private fun quickSettingsStyleLabel(style: Int): String =
 
 private const val STYLE_UWU = 0
 private const val STYLE_A16 = 1
+private const val QS_UI_STYLE_APPLIED_KEY = "qs_ui_style_applied"
