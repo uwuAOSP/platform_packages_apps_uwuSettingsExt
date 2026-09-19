@@ -22,14 +22,16 @@ import android.provider.Settings;
 import org.uwuaosp.settingsext.util.SettingsUtils;
 
 public final class NavigationSecureSettings {
+    private static final String NAVIGATION_BAR_HINT_KEY = "navigation_bar_hint";
+
     private NavigationSecureSettings() {
     }
 
     public static void setNavigationBarHintEnabled(Context context, boolean enabled) {
-        SettingsUtils.putSecureBoolean(context, Settings.Secure.NAVIGATION_BAR_HINT, enabled);
+        SettingsUtils.putSecureBoolean(context, NAVIGATION_BAR_HINT_KEY, enabled);
     }
 
     public static boolean isNavigationBarHintEnabled(Context context, boolean defaultValue) {
-        return SettingsUtils.getSecureBoolean(context, Settings.Secure.NAVIGATION_BAR_HINT, defaultValue);
+        return SettingsUtils.getSecureBoolean(context, NAVIGATION_BAR_HINT_KEY, defaultValue);
     }
 }

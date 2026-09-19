@@ -23,18 +23,19 @@ import org.uwuaosp.settingsext.util.SettingsUtils;
 
 public final class LauncherSecureSettings {
 
+    private static final String ALL_APPS_THEMED_ICONS_KEY = "launcher_allapps_themed_icons";
+    private static final String LENS_ICON_KEY = "launcher_lens_icon";
+
     private LauncherSecureSettings() {
     }
 
     public static void setAllAppsThemedIconsEnabled(Context context, boolean enabled) {
-        SettingsUtils.putSecureBoolean(context, Settings.Secure.LAUNCHER_ALLAPPS_THEMED_ICONS, enabled);
+        SettingsUtils.putSecureBoolean(context, ALL_APPS_THEMED_ICONS_KEY, enabled);
     }
 
     public static boolean isAllAppsThemedIconsEnabled(Context context, boolean defaultValue) {
-        return SettingsUtils.getSecureBoolean(context, Settings.Secure.LAUNCHER_ALLAPPS_THEMED_ICONS, defaultValue);
+        return SettingsUtils.getSecureBoolean(context, ALL_APPS_THEMED_ICONS_KEY, defaultValue);
     }
-
-    private static final String LENS_ICON_KEY = "launcher_lens_icon";
 
     public static void setLensIconEnabled(Context context, boolean enabled) {
         SettingsUtils.putSecureBoolean(context, LENS_ICON_KEY, enabled);
