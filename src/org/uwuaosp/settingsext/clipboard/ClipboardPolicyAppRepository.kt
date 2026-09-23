@@ -3,7 +3,7 @@
 package org.uwuaosp.settingsext.clipboard
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.UserHandle
@@ -15,7 +15,8 @@ internal data class ClipboardPolicyAppEntry(
     val label: String,
     val packageName: String,
     val icon: Bitmap,
-    val policy: Int,
+    val readPolicy: Int,
+    val writePolicy: Int,
 )
 
 internal class ClipboardPolicyAppRepository(private val context: Context) {
@@ -24,13 +25,24 @@ internal class ClipboardPolicyAppRepository(private val context: Context) {
         (48 * context.resources.displayMetrics.density).toInt().coerceAtLeast(1)
 
     fun loadApps(): List<ClipboardPolicyAppEntry> {
-        val policies = ClipboardPolicySecureSettings.getPolicies(context)
+        val readPolicies = ClipboardPolicySecureSettings.getPolicies(
+            context, ClipboardPolicySecureSettings.OPERATION_READ)
+        val writePolicies = ClipboardPolicySecureSettings.getPolicies(
+            context, ClipboardPolicySecureSettings.OPERATION_WRITE)
+        val defaultPolicy = ClipboardPolicySecureSettings.getDefaultPolicy(context)
         val userId = UserHandle.myUserId()
+        val launchablePackages =
+            packageManager
+                .queryIntentActivitiesAsUser(
+                    Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),
+                    0,
+                    userId,
+                )
+                .mapNotNullTo(mutableSetOf<String>()) { it.activityInfo?.packageName }
         return packageManager
             .getInstalledApplicationsAsUser(PackageManager.MATCH_DISABLED_COMPONENTS, userId)
             .asSequence()
-            .filter { UserHandle.isApp(it.uid) }
-            .filter { (it.flags and ApplicationInfo.FLAG_PERSISTENT) == 0 }
+            .filter { it.packageName in launchablePackages }
             .map { info ->
                 val packageName = info.packageName
                 val icon =
@@ -53,7 +65,8 @@ internal class ClipboardPolicyAppRepository(private val context: Context) {
                     info.loadLabel(packageManager).toString().ifBlank { packageName },
                     packageName,
                     icon,
-                    policies[packageName] ?: ClipboardPolicySecureSettings.POLICY_ALLOW,
+                    readPolicies[packageName] ?: defaultPolicy,
+                    writePolicies[packageName] ?: defaultPolicy,
                 )
             }
             .toList()

@@ -18,18 +18,48 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class ClipboardPolicySecureSettings {
+  public static final int OPERATION_READ = 0;
+  public static final int OPERATION_WRITE = 1;
   public static final int POLICY_ALLOW = Settings.Secure.UWU_APP_CLIPBOARD_POLICY_ALLOW;
   public static final int POLICY_ASK = Settings.Secure.UWU_APP_CLIPBOARD_POLICY_ASK;
   public static final int POLICY_DENY = Settings.Secure.UWU_APP_CLIPBOARD_POLICY_DENY;
 
   private ClipboardPolicySecureSettings() {}
 
-  public static synchronized ArrayMap<String, Integer> getPolicies(Context context) {
+  public static boolean isPromptEnabled(Context context) {
+    return Settings.Secure.getIntForUser(
+                context.getContentResolver(),
+                Settings.Secure.UWU_APP_CLIPBOARD_PROMPTS_ENABLED,
+                0,
+                UserHandle.myUserId())
+            != 0;
+  }
+
+  public static boolean setPromptEnabled(Context context, boolean enabled) {
+    return Settings.Secure.putIntForUser(
+        context.getContentResolver(),
+        Settings.Secure.UWU_APP_CLIPBOARD_PROMPTS_ENABLED,
+        enabled ? 1 : 0,
+        UserHandle.myUserId());
+  }
+
+  public static int getDefaultPolicy(Context context) {
+    return isPromptEnabled(context) ? POLICY_ASK : POLICY_ALLOW;
+  }
+
+  public static synchronized ArrayMap<String, Integer> getPolicies(Context context, int operation) {
+    final ArrayMap<String, Integer> policies = readPolicies(context,
+        Settings.Secure.UWU_APP_CLIPBOARD_POLICIES);
+    policies.putAll(readPolicies(context, policySetting(operation)));
+    return policies;
+  }
+
+  private static ArrayMap<String, Integer> readPolicies(Context context, String setting) {
     final ArrayMap<String, Integer> result = new ArrayMap<>();
     final String value =
         Settings.Secure.getStringForUser(
             context.getContentResolver(),
-            Settings.Secure.UWU_APP_CLIPBOARD_POLICIES,
+            setting,
             UserHandle.myUserId());
     if (value == null || value.isBlank()) return result;
     try {
@@ -38,7 +68,7 @@ public final class ClipboardPolicySecureSettings {
       while (keys.hasNext()) {
         final String packageName = keys.next();
         final int policy = object.optInt(packageName, POLICY_ALLOW);
-        if (policy == POLICY_ASK || policy == POLICY_DENY) {
+        if (policy == POLICY_ALLOW || policy == POLICY_ASK || policy == POLICY_DENY) {
           result.put(packageName, policy);
         }
       }
@@ -47,14 +77,15 @@ public final class ClipboardPolicySecureSettings {
     return result;
   }
 
-  public static synchronized boolean setPolicy(Context context, String packageName, int policy) {
-    final TreeMap<String, Integer> policies = new TreeMap<>();
-    policies.putAll(getPolicies(context));
-    if (policy == POLICY_ASK || policy == POLICY_DENY) {
-      policies.put(packageName, policy);
-    } else {
-      policies.remove(packageName);
+  public static synchronized boolean setPolicy(
+      Context context, String packageName, int operation, int policy) {
+    if (policy != POLICY_ALLOW && policy != POLICY_ASK && policy != POLICY_DENY) {
+      return false;
     }
+    final String setting = policySetting(operation);
+    final TreeMap<String, Integer> policies = new TreeMap<>();
+    policies.putAll(readPolicies(context, setting));
+    policies.put(packageName, policy);
 
     final JSONObject object = new JSONObject();
     try {
@@ -66,8 +97,18 @@ public final class ClipboardPolicySecureSettings {
     }
     return Settings.Secure.putStringForUser(
         context.getContentResolver(),
-        Settings.Secure.UWU_APP_CLIPBOARD_POLICIES,
+        setting,
         policies.isEmpty() ? null : object.toString(),
         UserHandle.myUserId());
+  }
+
+  private static String policySetting(int operation) {
+    if (operation == OPERATION_READ) {
+      return Settings.Secure.UWU_APP_CLIPBOARD_READ_POLICIES;
+    }
+    if (operation == OPERATION_WRITE) {
+      return Settings.Secure.UWU_APP_CLIPBOARD_WRITE_POLICIES;
+    }
+    throw new IllegalArgumentException("Unknown clipboard operation: " + operation);
   }
 }

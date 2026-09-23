@@ -49,6 +49,7 @@ import org.uwuaosp.compose.settingslib.AppListItem
 import org.uwuaosp.compose.settingslib.AppListLoading
 import org.uwuaosp.compose.settingslib.AppListScaffold
 import org.uwuaosp.compose.settingslib.SettingsSectionHeader
+import org.uwuaosp.compose.settingslib.MainSwitchPreference
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
@@ -75,6 +76,21 @@ class ClipboardPolicyActivity : ComponentActivity() {
             false,
             observer,
         )
+        contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.UWU_APP_CLIPBOARD_READ_POLICIES),
+            false,
+            observer,
+        )
+        contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.UWU_APP_CLIPBOARD_WRITE_POLICIES),
+            false,
+            observer,
+        )
+        contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.UWU_APP_CLIPBOARD_PROMPTS_ENABLED),
+            false,
+            observer,
+        )
         refreshToken.intValue++
     }
 
@@ -93,6 +109,9 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
     var failed by remember { mutableStateOf(false) }
     var query by rememberSaveable { mutableStateOf("") }
     var retryToken by remember { mutableIntStateOf(0) }
+    var promptsEnabled by remember(refreshToken) {
+        mutableStateOf(ClipboardPolicySecureSettings.isPromptEnabled(context))
+    }
 
     LaunchedEffect(refreshToken, retryToken) {
         loading = true
@@ -117,6 +136,25 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
         onSearchQueryChange = { query = it },
         onNavigateUp = onNavigateUp,
     ) {
+        item {
+            MainSwitchPreference(
+                title = stringResource(R.string.clipboard_policy_prompt_enabled),
+                checked = promptsEnabled,
+                onCheckedChange = { enabled ->
+                    if (ClipboardPolicySecureSettings.setPromptEnabled(context, enabled)) {
+                        promptsEnabled = enabled
+                        retryToken++
+                    } else {
+                        Toast.makeText(
+                                context,
+                                R.string.clipboard_policy_prompt_update_failed,
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
+                    }
+                },
+            )
+        }
         item { SettingsSectionHeader(title = stringResource(R.string.clipboard_policy_apps_category)) }
         when {
             loading -> item { AppListLoading() }
@@ -138,18 +176,23 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                             app = app,
                             index = index,
                             itemCount = filtered.size,
-                        ) { policy ->
+                        ) { operation, policy ->
                             if (
                                 ClipboardPolicySecureSettings.setPolicy(
                                     context,
                                     app.packageName,
+                                    operation,
                                     policy,
                                 )
                             ) {
                                 apps =
                                     apps.map { entry ->
                                         if (entry.packageName == app.packageName) {
-                                            entry.copy(policy = policy)
+                                            if (operation == ClipboardPolicySecureSettings.OPERATION_READ) {
+                                                entry.copy(readPolicy = policy)
+                                            } else {
+                                                entry.copy(writePolicy = policy)
+                                            }
                                         } else {
                                             entry
                                         }
@@ -174,67 +217,95 @@ private fun ClipboardPolicyRow(
     app: ClipboardPolicyAppEntry,
     index: Int,
     itemCount: Int,
-    onPolicySelected: (Int) -> Unit,
+    onPolicySelected: (Int, Int) -> Unit,
 ) {
-    var expanded by remember(app.packageName) { mutableStateOf(false) }
-    val policyLabel = clipboardPolicyLabel(app.policy)
+    var readExpanded by remember(app.packageName) { mutableStateOf(false) }
+    var writeExpanded by remember(app.packageName) { mutableStateOf(false) }
     AppListItem(
         label = app.label,
         packageName = app.packageName,
         icon = app.icon.asImageBitmap(),
         index = index,
         itemCount = itemCount,
-        onClick = { expanded = true },
+        onClick = { readExpanded = true },
     ) {
-        Box {
-            Row(
-                modifier =
-                    Modifier.clip(RoundedCornerShape(20.dp))
-                        .clickable(role = Role.Button, onClick = { expanded = true })
-                        .padding(horizontal = 8.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = policyLabel,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelLarge,
-                    maxLines = 1,
+        Column {
+            ClipboardPolicyAction(
+                label = stringResource(R.string.clipboard_policy_read),
+                policy = app.readPolicy,
+                expanded = readExpanded,
+                onExpandedChange = { readExpanded = it },
+                onPolicySelected = {
+                    onPolicySelected(ClipboardPolicySecureSettings.OPERATION_READ, it)
+                },
+            )
+            ClipboardPolicyAction(
+                label = stringResource(R.string.clipboard_policy_write),
+                policy = app.writePolicy,
+                expanded = writeExpanded,
+                onExpandedChange = { writeExpanded = it },
+                onPolicySelected = {
+                    onPolicySelected(ClipboardPolicySecureSettings.OPERATION_WRITE, it)
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ClipboardPolicyAction(
+    label: String,
+    policy: Int,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onPolicySelected: (Int) -> Unit,
+) {
+    Box {
+        Row(
+            modifier = Modifier.clip(RoundedCornerShape(20.dp))
+                .clickable(role = Role.Button, onClick = { onExpandedChange(true) })
+                .padding(horizontal = 8.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "$label: ${clipboardPolicyLabel(policy)}",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelLarge,
+                maxLines = 1,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                contentDescription = label,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { onExpandedChange(false) },
+            modifier = Modifier.widthIn(min = 180.dp),
+            shape = RoundedCornerShape(16.dp),
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            tonalElevation = 0.dp,
+            shadowElevation = 3.dp,
+        ) {
+            val policies = listOf(
+                ClipboardPolicySecureSettings.POLICY_ALLOW,
+                ClipboardPolicySecureSettings.POLICY_ASK,
+                ClipboardPolicySecureSettings.POLICY_DENY,
+            )
+            policies.forEachIndexed { index, choice ->
+                ExpressiveModeMenuItem(
+                    text = clipboardPolicyLabel(choice),
+                    selected = policy == choice,
+                    position = index,
+                    itemCount = policies.size,
+                    onClick = {
+                        onExpandedChange(false)
+                        onPolicySelected(choice)
+                    },
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_left_down_line),
-                    contentDescription = stringResource(R.string.clipboard_policy_app_policy),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.widthIn(min = 180.dp),
-                shape = RoundedCornerShape(16.dp),
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                tonalElevation = 0.dp,
-                shadowElevation = 3.dp,
-            ) {
-                val policies =
-                    listOf(
-                        ClipboardPolicySecureSettings.POLICY_ALLOW,
-                        ClipboardPolicySecureSettings.POLICY_ASK,
-                        ClipboardPolicySecureSettings.POLICY_DENY,
-                    )
-                policies.forEachIndexed { index, policy ->
-                    ExpressiveModeMenuItem(
-                        text = clipboardPolicyLabel(policy),
-                        selected = app.policy == policy,
-                        position = index,
-                        itemCount = policies.size,
-                        onClick = {
-                            expanded = false
-                            onPolicySelected(policy)
-                        },
-                    )
-                }
             }
         }
     }
