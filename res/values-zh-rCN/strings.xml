@@ -281,11 +281,12 @@
     <string name="lyric_hide_icon_clock_right_title">隐藏音乐应用图标</string>
     <string name="lyric_hide_icon_clock_right_summary">在时钟右侧显示歌词时隐藏音乐应用图标</string>
     <string name="lyric_sources_title">自定义歌词源</string>
-    <string name="lyric_sources_summary_default">使用内置网易云歌词源</string>
+    <string name="lyric_sources_summary_default">使用默认远程歌词源，失败时回退</string>
     <string name="lyric_sources_summary_configured">使用已配置的 HTTPS 歌词源</string>
     <string name="lyric_sources_dialog_title">配置歌词源</string>
     <string name="lyric_sources_dialog_label">歌词源 URL</string>
-    <string name="lyric_sources_dialog_hint">https://example.com/api;https://mirror.example/api</string>
+    <string name="lyric_sources_dialog_hint">https://example.com;https://mirror.example</string>
+    <string name="lyric_sources_dialog_error">请输入以分号分隔的 HTTPS URL。</string>
     <string name="lyric_sources_dialog_save">保存</string>
 
     <string name="app_jump_settings_title">应用跳转权限</string>

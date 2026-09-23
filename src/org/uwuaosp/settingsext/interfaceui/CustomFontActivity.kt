@@ -188,7 +188,9 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                         enabled = !operationRunning,
                         index = index,
                         itemCount = fonts.size,
-                        modifier = Modifier.semantics { role = Role.RadioButton },
+                        modifier = Modifier
+                            .padding(top = if (index > 0) 2.dp else 0.dp)
+                            .semantics { role = Role.RadioButton },
                         trailingContent = {
                             RadioButton(selected = selectedId == font.id, onClick = null)
                         },

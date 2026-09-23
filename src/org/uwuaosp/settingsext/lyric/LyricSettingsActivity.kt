@@ -16,6 +16,7 @@
 
 package org.uwuaosp.settingsext.lyric
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -197,13 +198,36 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
             confirmText = stringResource(R.string.lyric_sources_dialog_save),
             dismissText = stringResource(android.R.string.cancel),
             singleLine = false,
+            validator = ::isValidSources,
+            errorText = stringResource(R.string.lyric_sources_dialog_error),
             onConfirm = { value ->
-                sources = value.trim()
+                sources = normalizeSources(value)
                 LyricSecureSettings.setSources(context, sources)
                 showSourcesDialog = false
             },
             onDismissRequest = { showSourcesDialog = false },
         )
+    }
+}
+
+private fun normalizeSources(value: String): String {
+    return value.split(';')
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+        .joinToString(";")
+}
+
+private fun isValidSources(value: String): Boolean {
+    return value.split(';').all { source ->
+        val trimmed = source.trim()
+        if (trimmed.isEmpty()) {
+            true
+        } else {
+            val uri = Uri.parse(trimmed)
+            !trimmed.any { it.isWhitespace() }
+                && uri.scheme.equals("https", ignoreCase = true)
+                && !uri.host.isNullOrEmpty()
+        }
     }
 }
 
