@@ -93,6 +93,9 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
     var showTranslation by remember(refreshToken) {
         mutableStateOf(LyricSecureSettings.isShowTranslationEnabled(context, false))
     }
+    var wordTimingEnabled by remember(refreshToken) {
+        mutableStateOf(LyricSecureSettings.isWordTimingEnabled(context, true))
+    }
     var hideClockRightIcon by remember(refreshToken) {
         mutableStateOf(LyricSecureSettings.isHideIconOnClockRightEnabled(context, false))
     }
@@ -145,6 +148,18 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
             onCheckedChange = { value ->
                 showTranslation = value
                 LyricSecureSettings.setShowTranslation(context, value)
+            },
+                )
+            }
+            item {
+                SwitchPreferenceRow(
+            title = stringResource(R.string.lyric_word_timing_title),
+            summary = stringResource(R.string.lyric_word_timing_summary),
+            checked = wordTimingEnabled,
+            enabled = enabled,
+            onCheckedChange = { value ->
+                wordTimingEnabled = value
+                LyricSecureSettings.setWordTimingEnabled(context, value)
             },
                 )
             }

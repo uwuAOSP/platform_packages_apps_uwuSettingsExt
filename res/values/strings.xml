@@ -284,6 +284,8 @@
     <string name="lyric_position_summary_clock_right">Show to the right of the clock</string>
     <string name="lyric_show_translation_title">Show Translation</string>
     <string name="lyric_show_translation_summary">Show translated lyric lines when available</string>
+    <string name="lyric_word_timing_title">Use Word-Timed Lyrics</string>
+    <string name="lyric_word_timing_summary">Prefer enhanced lyrics with per-word timing when available</string>
     <string name="lyric_hide_icon_clock_right_title">Hide Music App Icon</string>
     <string name="lyric_hide_icon_clock_right_summary">Hide the music app icon when showing lyrics to the right of the clock</string>
     <string name="lyric_sources_title">Custom Sources</string>

@@ -52,6 +52,14 @@ public final class LyricSecureSettings {
         return SettingsUtils.getSecureBoolean(context, Settings.Secure.STATUS_BAR_LYRIC_SHOW_TRANSLATION, defaultValue);
     }
 
+    public static void setWordTimingEnabled(Context context, boolean enabled) {
+        SettingsUtils.putSecureBoolean(context, Settings.Secure.STATUS_BAR_LYRIC_WORD_TIMING, enabled);
+    }
+
+    public static boolean isWordTimingEnabled(Context context, boolean defaultValue) {
+        return SettingsUtils.getSecureBoolean(context, Settings.Secure.STATUS_BAR_LYRIC_WORD_TIMING, defaultValue);
+    }
+
     public static void setHideIconOnClockRight(Context context, boolean enabled) {
         SettingsUtils.putSecureBoolean(context, Settings.Secure.STATUS_BAR_LYRIC_HIDE_ICON_CLOCK_RIGHT, enabled);
     }

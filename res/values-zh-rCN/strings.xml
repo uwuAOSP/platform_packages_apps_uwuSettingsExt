@@ -278,6 +278,8 @@
     <string name="lyric_position_summary_clock_right">显示在时钟右侧</string>
     <string name="lyric_show_translation_title">显示翻译</string>
     <string name="lyric_show_translation_summary">有翻译歌词时一并显示</string>
+    <string name="lyric_word_timing_title">使用逐字歌词</string>
+    <string name="lyric_word_timing_summary">有可用数据时优先使用带逐字时间轴的歌词</string>
     <string name="lyric_hide_icon_clock_right_title">隐藏音乐应用图标</string>
     <string name="lyric_hide_icon_clock_right_summary">在时钟右侧显示歌词时隐藏音乐应用图标</string>
     <string name="lyric_sources_title">自定义歌词源</string>
