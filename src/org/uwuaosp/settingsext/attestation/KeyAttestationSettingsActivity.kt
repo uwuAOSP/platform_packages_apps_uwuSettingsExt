@@ -36,12 +36,10 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.io.StringReader
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
 import org.uwuaosp.compose.settingslib.SettingsScaffold
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.apppicker.AppSelectionActivity
@@ -109,18 +107,18 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
         showBackButton = true,
         onNavigateUp = onNavigateUp,
     ) {
-        SettingsCategory(title = stringResource(R.string.key_attestation_keybox_category))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.key_attestation_keybox_category)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.keybox_data_title),
             summary = stringResource(R.string.keybox_data_summary),
-            position = PreferencePosition.Top,
             onClick = { keyboxPicker.launch(KEYBOX_MIME_TYPES) },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.key_attestation_clear_keybox_title),
             summary = stringResource(R.string.key_attestation_clear_keybox_summary),
-            position = PreferencePosition.Bottom,
             enabled = !keyboxData.isNullOrBlank(),
             onClick = {
                 KeyAttestationSecureSettings.setKeyboxData(context, null)
@@ -128,14 +126,19 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                 Toast.makeText(context, R.string.key_attestation_xml_cleared, Toast.LENGTH_SHORT)
                     .show()
             },
-        )
-        SettingsFooterLegacy(
-            KeyAttestationSummaryUtils.buildKeyboxFooterSummary(context, keyboxData).toString()
-        )
+                )
+            }
+            item {
+                SettingsFooterLegacy(
+                    KeyAttestationSummaryUtils.buildKeyboxFooterSummary(context, keyboxData).toString()
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.key_attestation_apps_category))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.key_attestation_apps_category)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.key_attestation_excluded_apps_title),
             summary =
                 if (excludedPackageCount == 0) {
@@ -156,22 +159,26 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                         )
                 )
             },
-        )
-        SettingsFooterLegacy(stringResource(R.string.key_attestation_excluded_apps_footer))
+                )
+            }
+            item {
+                SettingsFooterLegacy(stringResource(R.string.key_attestation_excluded_apps_footer))
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.key_attestation_pif_category))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.key_attestation_pif_category)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.pif_data_title),
             summary = stringResource(R.string.pif_data_summary),
-            position = PreferencePosition.Top,
             onClick = { pifPicker.launch(PIF_MIME_TYPES) },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.key_attestation_clear_pif_title),
             summary = stringResource(R.string.key_attestation_clear_pif_summary),
-            position = PreferencePosition.Bottom,
             enabled = !pifData.isNullOrBlank(),
             onClick = {
                 KeyAttestationSecureSettings.setPifData(context, null)
@@ -180,10 +187,14 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                 Toast.makeText(context, R.string.key_attestation_json_cleared, Toast.LENGTH_SHORT)
                     .show()
             },
-        )
-        SettingsFooterLegacy(
-            KeyAttestationSummaryUtils.buildPifFooterSummary(context, pifData).toString()
-        )
+                )
+            }
+            item {
+                SettingsFooterLegacy(
+                    KeyAttestationSummaryUtils.buildPifFooterSummary(context, pifData).toString()
+                )
+            }
+        }
     }
 }
 

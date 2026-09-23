@@ -44,9 +44,7 @@ import org.uwuaosp.compose.settingslib.AppListError
 import org.uwuaosp.compose.settingslib.AppListItem
 import org.uwuaosp.compose.settingslib.AppListLoading
 import org.uwuaosp.compose.settingslib.AppListScaffold
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.SettingsCategory
-import org.uwuaosp.compose.settingslib.preferencePosition
+import org.uwuaosp.compose.settingslib.SettingsSectionHeader
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.attestation.KeyAttestationSecureSettings
@@ -193,7 +191,7 @@ private fun AppSelectionScreen(
         onNavigateUp = onNavigateUp,
     ) {
         item(key = "apps_category") {
-            SettingsCategory(title = stringResource(R.string.app_picker_all_apps))
+            SettingsSectionHeader(title = stringResource(R.string.app_picker_all_apps))
         }
         when {
             loading -> item(key = "loading") { AppListLoading() }
@@ -218,7 +216,8 @@ private fun AppSelectionScreen(
                             label = app.label,
                             packageName = app.packageName,
                             icon = app.icon.asImageBitmap(),
-                            position = preferencePosition(index, filteredApps.lastIndex),
+                            index = index,
+                            itemCount = filteredApps.size,
                             onClick = {
                                 if (multiple) {
                                     selectedPackages =
@@ -235,7 +234,6 @@ private fun AppSelectionScreen(
                         ) {
                             Checkbox(checked = selected, onCheckedChange = null)
                         }
-                        if (index != filteredApps.lastIndex) PreferenceGroupSpacer()
                     }
                 }
         }

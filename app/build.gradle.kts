@@ -31,14 +31,18 @@ android {
             manifest.srcFile("../AndroidManifest.xml")
             java.setSrcDirs(listOf("../src"))
             res.setSrcDirs(listOf("../res"))
-        }
-        getByName("debug") {
             res.srcDir("../../../../frameworks/base/packages/SettingsLib/SettingsTheme/res")
         }
     }
 
     buildFeatures {
         compose = true
+    }
+
+    lint {
+        // SettingsTheme is consumed directly from AOSP and intentionally has
+        // some v31-only resources without Gradle lint fallbacks.
+        disable += "MissingDefaultResource"
     }
 
     compileOptions {

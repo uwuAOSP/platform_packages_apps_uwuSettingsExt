@@ -47,10 +47,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.uwuaosp.compose.settingslib.MainSwitchPreference
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.compose.settingslib.SettingsTopIntro
 import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
@@ -122,8 +120,9 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
             },
         )
 
-        SettingsCategory(title = stringResource(R.string.lyric_settings_section_behavior))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.lyric_settings_section_behavior)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.lyric_position_title),
             summary = stringResource(
                 if (position == LyricSecureSettings.POSITION_CLOCK_RIGHT) {
@@ -133,36 +132,38 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                 },
             ),
             enabled = enabled,
-            position = PreferencePosition.Top,
             onClick = { showPositionDialog = true },
-        )
-        PreferenceGroupSpacer()
-        SwitchPreferenceRow(
+                )
+            }
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.lyric_show_translation_title),
             summary = stringResource(R.string.lyric_show_translation_summary),
             checked = showTranslation,
             enabled = enabled,
-            position = PreferencePosition.Middle,
             onCheckedChange = { value ->
                 showTranslation = value
                 LyricSecureSettings.setShowTranslation(context, value)
             },
-        )
-        PreferenceGroupSpacer()
-        SwitchPreferenceRow(
+                )
+            }
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.lyric_hide_icon_clock_right_title),
             summary = stringResource(R.string.lyric_hide_icon_clock_right_summary),
             checked = hideClockRightIcon,
             enabled = enabled && position == LyricSecureSettings.POSITION_CLOCK_RIGHT,
-            position = PreferencePosition.Middle,
             onCheckedChange = { value ->
                 hideClockRightIcon = value
                 LyricSecureSettings.setHideIconOnClockRight(context, value)
             },
-        )
+                )
+            }
+        }
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.lyric_settings_section_sources))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.lyric_settings_section_sources)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.lyric_sources_title),
             summary = if (sources.isBlank()) {
                 stringResource(R.string.lyric_sources_summary_default)
@@ -173,7 +174,9 @@ private fun LyricSettingsScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
             onClick = {
                 showSourcesDialog = true
             },
-        )
+                )
+            }
+        }
     }
 
     if (showPositionDialog) {

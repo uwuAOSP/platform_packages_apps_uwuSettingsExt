@@ -47,14 +47,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
 import org.uwuaosp.compose.settingslib.PrimarySwitchPreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsIllustrationHeader
 import org.uwuaosp.compose.settingslib.SettingsScaffold
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.rememberSettingsTypography
 import org.uwuaosp.settingsext.attestation.KeyAttestationSettingsActivity
 import org.uwuaosp.settingsext.appjump.AppJumpSettingsActivity
@@ -173,44 +171,45 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             height = 180.dp,
         )
 
-        SettingsCategory(title = stringResource(R.string.settings_ext_category_system_interface))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.settings_ext_category_system_interface)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.interface_settings_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Top,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_interface_settings)
             },
             onClick = {
                 context.startActivity(Intent(context, InterfaceSettingsActivity::class.java))
             },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.background_management_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Middle,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_background_management)
             },
             onClick = {
                 context.startActivity(Intent(context, BackgroundManagementActivity::class.java))
             },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.sensor_policy_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Middle,
             iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_sensor_policy) },
             onClick = { context.startActivity(Intent(context, SensorPolicyActivity::class.java)) },
-        )
-        PreferenceGroupSpacer()
-        if (FeatureUtils.isMomentSettingsEnabled(context)) {
-            PrimarySwitchPreferenceRow(
+                )
+            }
+            if (FeatureUtils.isMomentSettingsEnabled(context)) {
+                item {
+                    PrimarySwitchPreferenceRow(
                 title = stringResource(R.string.moment_settings_title),
                 summary = "",
                 showSummary = false,
@@ -219,7 +218,6 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
                     momentEnabled = enabled
                     MomentSecureSettings.setEnabled(context, enabled)
                 },
-                position = PreferencePosition.Middle,
                 iconContent = {
                     SettingsHomepageIcon(iconRes = R.drawable.ic_moment)
                 },
@@ -228,26 +226,26 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
                         Intent(context, MomentSettingsActivity::class.java),
                     )
                 },
-            )
-            PreferenceGroupSpacer()
-        }
-        PreferenceRow(
+                    )
+                }
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.settings_ext_launcher_settings_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Middle,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_launcher_settings)
             },
             onClick = { context.startActivity(launcherSettingsIntent) },
-        )
-        PreferenceGroupSpacer()
-        PrimarySwitchPreferenceRow(
+                )
+            }
+            item {
+                PrimarySwitchPreferenceRow(
             title = stringResource(R.string.external_desktop_title),
             summary = "",
             showSummary = false,
             checked = externalDesktopEnabled,
-            position = PreferencePosition.Middle,
             onCheckedChange = { enabled ->
                 externalDesktopEnabled = enabled
                 ExternalDesktopSecureSettings.setEnabled(context, enabled)
@@ -260,14 +258,14 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_external_desktop)
             },
-        )
-        PreferenceGroupSpacer()
-        PrimarySwitchPreferenceRow(
+                )
+            }
+            item {
+                PrimarySwitchPreferenceRow(
             title = stringResource(R.string.settings_ext_lyric_fetch_title),
             summary = "",
             showSummary = false,
             checked = lyricEnabled,
-            position = PreferencePosition.Bottom,
             onCheckedChange = { enabled ->
                 lyricEnabled = enabled
                 LyricSecureSettings.setEnabled(context, enabled)
@@ -278,74 +276,74 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_statusbarlyric)
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.settings_ext_category_privacy_security))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.settings_ext_category_privacy_security)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.settings_ext_key_attestation_title),
             summary = "",
             showSummary = false,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_spoofing)
             },
-            position = PreferencePosition.Top,
             onClick = {
                 context.startActivity(Intent(context, KeyAttestationSettingsActivity::class.java))
             },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.settings_ext_app_jump_title),
             summary = "",
             showSummary = false,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_appjump)
             },
-            position = PreferencePosition.Middle,
             onClick = {
                 context.startActivity(AppJumpSettingsActivity.createIntent(context))
             },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.clipboard_policy_title),
             summary = "",
             showSummary = false,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_clipboard_policy)
             },
-            position = PreferencePosition.Bottom,
             onClick = {
                 context.startActivity(Intent(context, ClipboardPolicyActivity::class.java))
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.settings_ext_category_intelligence))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.settings_ext_category_intelligence)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.settings_ext_smart_suggestions_title),
             summary = "",
             showSummary = false,
-            position = if (aiEntryUnlocked) {
-                PreferencePosition.Top
-            } else {
-                PreferencePosition.Top
-            },
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_smart_suggestions)
             },
             onClick = {
                 context.startActivity(Intent(context, SmartSuggestionsSettingsActivity::class.java))
             },
-        )
-        if (aiEntryUnlocked) {
-            PreferenceGroupSpacer()
-            PreferenceRow(
+                )
+            }
+            if (aiEntryUnlocked) {
+                item {
+                    PreferenceRow(
                 title = stringResource(R.string.settings_ext_ai_core_title),
                 summary = "",
                 showSummary = false,
-                position = PreferencePosition.Middle,
                 iconContent = {
                     SettingsHomepageIcon(iconRes = R.drawable.ic_ai)
                 },
@@ -354,14 +352,14 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
                         Intent().setComponent(ComponentName(AI_CORE_PACKAGE, AI_CORE_ACTIVITY)),
                     )
                 },
-            )
-        }
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                    )
+                }
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.settings_ext_prism_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Bottom,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_phone_camera)
             },
@@ -372,7 +370,9 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
                     ),
                 )
             },
-        )
+                )
+            }
+        }
     }
 }
 

@@ -33,11 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
 import org.uwuaosp.compose.settingslib.PrimarySwitchPreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.SettingsIllustrationHeader
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.compose.settingslib.SettingsTopIntro
@@ -108,8 +106,9 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
             height = 240.dp,
         )
 
-        SettingsCategory(title = stringResource(R.string.suggestion_section_flashlight))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.suggestion_section_flashlight)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.switch_torch_suggestion_title),
             summary = stringResource(R.string.switch_torch_suggestion_desc),
             checked = torchEnabled,
@@ -117,11 +116,14 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                 torchEnabled = it
                 SmartSuggestionsSecureSettings.setTorchEnabled(context, it)
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.suggestion_section_music))
-        PrimarySwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.suggestion_section_music)) {
+            item {
+                PrimarySwitchPreferenceRow(
             title = stringResource(R.string.switch_music_suggestion_title),
             summary = if (musicEnabled) {
                 stringResource(R.string.switch_music_suggestion_summary_on, musicLabel)
@@ -141,11 +143,14 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                     ),
                 )
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.suggestion_section_sms))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.suggestion_section_sms)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.switch_sms_code_title),
             summary = stringResource(R.string.switch_sms_code_desc),
             checked = smsEnabled,
@@ -153,10 +158,10 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                 smsEnabled = it
                 SmsCodeRuleStore.setEnabled(context, it)
             },
-            position = PreferencePosition.Top,
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.sms_code_rule_settings_title),
             summary = ruleCountSummary(
                 context = context,
@@ -164,15 +169,17 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                 countRes = R.string.sms_code_rule_custom_summary_count,
                 count = customSmsCount,
             ),
-            position = PreferencePosition.Bottom,
             onClick = {
                 context.startActivity(Intent(context, SmartSuggestionsSmsRulesActivity::class.java))
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.suggestion_section_links))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.suggestion_section_links)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.switch_url_suggestion_title),
             summary = stringResource(R.string.switch_url_suggestion_desc),
             checked = clipboardEnabled,
@@ -180,10 +187,10 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                 clipboardEnabled = it
                 ClipboardRuleStore.setEnabled(context, it)
             },
-            position = PreferencePosition.Top,
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.clipboard_rule_settings_title),
             summary = ruleCountSummary(
                 context,
@@ -191,11 +198,12 @@ private fun SmartSuggestionsScreen(refreshToken: Int, onNavigateUp: () -> Unit) 
                 R.string.clipboard_rule_custom_summary_count,
                 customClipboardCount,
             ),
-            position = PreferencePosition.Bottom,
             onClick = {
                 context.startActivity(Intent(context, SmartSuggestionsClipboardRulesActivity::class.java))
             },
-        )
+                )
+            }
+        }
 
     }
 }

@@ -67,12 +67,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.airbnb.lottie.LottieAnimationView
 import org.uwuaosp.compose.settingslib.MainSwitchPreference
 import org.uwuaosp.compose.settingslib.PrimarySwitchPreferenceRow
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsScaffold
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.SettingsToolbarActionButton
 import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
 import org.uwuaosp.compose.settingslib.rememberSettingsTypography
@@ -146,8 +144,9 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
             },
         )
 
-        SettingsCategory(title = stringResource(R.string.moment_gestures_section))
-        PrimarySwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.moment_gestures_section)) {
+            item {
+                PrimarySwitchPreferenceRow(
             title = stringResource(R.string.moment_nav_handle_double_tap_title),
             summary = stringResource(R.string.moment_nav_handle_double_tap_summary),
             checked = navHandleDoubleTapEnabled,
@@ -161,10 +160,10 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                 )
             },
             enabled = momentEnabled,
-            position = PreferencePosition.Top,
-        )
-        PreferenceGroupSpacer()
-        PrimarySwitchPreferenceRow(
+                )
+            }
+            item {
+                PrimarySwitchPreferenceRow(
             title = stringResource(R.string.moment_arc_gesture_title),
             summary = stringResource(R.string.moment_arc_gesture_summary),
             checked = arcGestureEnabled,
@@ -176,12 +175,14 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                 context.startActivity(Intent(context, MomentArcEditorActivity::class.java))
             },
             enabled = momentEnabled,
-            position = PreferencePosition.Bottom,
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.moment_notification_section))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.moment_notification_section)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.moment_notification_click_title),
             summary = stringResource(R.string.moment_notification_click_summary),
             checked = notificationClickEnabled,
@@ -190,10 +191,10 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                 MomentSecureSettings.setNotificationClickEnabled(context, enabled)
             },
             enabled = momentEnabled,
-            position = PreferencePosition.Top,
-        )
-        PreferenceGroupSpacer()
-        SwitchPreferenceRow(
+                )
+            }
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.moment_notification_click_portrait_title),
             summary = "",
             showSummary = false,
@@ -203,10 +204,10 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                 MomentSecureSettings.setNotificationClickPortraitEnabled(context, enabled)
             },
             enabled = momentEnabled && notificationClickEnabled,
-            position = PreferencePosition.Middle,
-        )
-        PreferenceGroupSpacer()
-        SwitchPreferenceRow(
+                )
+            }
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.moment_notification_click_landscape_title),
             summary = "",
             showSummary = false,
@@ -216,23 +217,26 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                 MomentSecureSettings.setNotificationClickLandscapeEnabled(context, enabled)
             },
             enabled = momentEnabled && notificationClickEnabled,
-            position = PreferencePosition.Bottom,
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.moment_section_experience))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.moment_section_experience)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.moment_launch_title),
             summary = stringResource(R.string.moment_launch_summary),
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_moment)
             },
             enabled = momentEnabled,
-            position = PreferencePosition.Single,
             onClick = {
                 MomentAllAppsActivity.startInMoment(context)
             },
-        )
+                )
+            }
+        }
     }
 }
 

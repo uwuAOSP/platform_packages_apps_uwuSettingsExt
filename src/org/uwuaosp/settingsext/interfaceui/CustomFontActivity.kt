@@ -65,14 +65,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
 import org.uwuaosp.compose.settingslib.SettingsAppBarScaffold
-import org.uwuaosp.compose.settingslib.SettingsCategory
+import org.uwuaosp.compose.settingslib.SettingsSectionHeader
 import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
 import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
-import org.uwuaosp.compose.settingslib.preferencePosition
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 
@@ -144,14 +141,13 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
         ) {
             item(key = "preview", contentType = "preview") { FontPreviewCard(selectedFont) }
             item(key = "source-category", contentType = "category") {
-                SettingsCategory(title = stringResource(R.string.custom_font_source_category))
+                SettingsSectionHeader(title = stringResource(R.string.custom_font_source_category))
             }
             item(key = "source", contentType = "preference") {
                 PreferenceRow(
                     title = stringResource(R.string.custom_font_import_title),
                     summary = stringResource(R.string.custom_font_import_summary),
                     enabled = !operationRunning,
-                    position = PreferencePosition.Single,
                     iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
                     trailingContent = {
                         if (operationRunning) {
@@ -167,7 +163,7 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
 
             if (fonts.isNotEmpty()) {
                 item(key = "available-category", contentType = "category") {
-                    SettingsCategory(
+                    SettingsSectionHeader(
                         title = stringResource(R.string.custom_font_available_category)
                     )
                 }
@@ -190,14 +186,14 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                                 },
                             ),
                         enabled = !operationRunning,
-                        position = preferencePosition(index, fonts.lastIndex),
+                        index = index,
+                        itemCount = fonts.size,
                         modifier = Modifier.semantics { role = Role.RadioButton },
                         trailingContent = {
                             RadioButton(selected = selectedId == font.id, onClick = null)
                         },
                         onClick = { selectedId = font.id },
                     )
-                    if (index != fonts.lastIndex) PreferenceGroupSpacer()
                 }
                 item(key = "apply", contentType = "action") {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -245,14 +241,13 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
 
             if (activeFont != null) {
                 item(key = "current-category", contentType = "category") {
-                    SettingsCategory(title = stringResource(R.string.custom_font_current_category))
+                    SettingsSectionHeader(title = stringResource(R.string.custom_font_current_category))
                 }
                 item(key = "restore", contentType = "preference") {
                     PreferenceRow(
                         title = stringResource(R.string.custom_font_restore_title),
                         summary = stringResource(R.string.custom_font_restore_summary),
                         enabled = !operationRunning,
-                        position = PreferencePosition.Single,
                         onClick = {
                             scope.launch {
                                 operationRunning = true

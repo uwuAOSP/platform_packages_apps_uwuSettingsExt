@@ -55,9 +55,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
-import org.uwuaosp.compose.settingslib.SettingsCategory
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
@@ -123,8 +121,9 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
         showBackButton = true,
         onNavigateUp = onNavigateUp,
     ) {
-        SettingsCategory(title = stringResource(R.string.background_display_category))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.background_display_category)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.background_show_system_apps),
             summary = "",
             showSummary = false,
@@ -133,16 +132,18 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
                 showSystemApps = show
                 BackgroundListPreferences.setShowSystemApps(context, show)
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.background_behavior_category))
-        SwitchPreferenceRow(
+        SettingsSection(title = stringResource(R.string.background_behavior_category)) {
+            item {
+                SwitchPreferenceRow(
             title = stringResource(R.string.background_ignore_task_removal),
             summary = stringResource(R.string.background_ignore_task_removal_summary),
             showSummary = true,
             checked = ignoreTaskRemoval,
-            position = PreferencePosition.Top,
             onCheckedChange = { enabled ->
                 if (BackgroundModeSecureSettings.setIgnoreTaskRemovalEnabled(context, enabled)) {
                     ignoreTaskRemoval = enabled
@@ -154,13 +155,13 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
                     ).show()
                 }
             },
-        )
-        PreferenceGroupSpacer()
-        PreferenceRow(
+                )
+            }
+            item {
+                PreferenceRow(
             title = stringResource(R.string.background_freezer_backend_title),
             summary = "",
             showSummary = false,
-            position = PreferencePosition.Bottom,
             onClick = { backendMenuExpanded = true },
             trailingContent = {
                 Box {
@@ -233,16 +234,18 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
                     }
                 }
             },
-        )
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-        SettingsCategory(title = stringResource(R.string.background_diagnostics_category))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.background_diagnostics_category)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.background_export_logs),
             summary = "",
             showSummary = false,
             enabled = !exporting,
-            position = PreferencePosition.Single,
             iconContent = {
                 SettingsHomepageIcon(iconRes = R.drawable.ic_background_log_description)
             },
@@ -250,7 +253,9 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
                 val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
                 exportLauncher.launch("uwu-background-$timestamp.log")
             },
-        )
+                )
+            }
+        }
     }
 }
 

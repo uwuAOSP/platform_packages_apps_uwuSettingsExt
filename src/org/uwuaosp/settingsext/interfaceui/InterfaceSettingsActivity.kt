@@ -42,12 +42,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.uwuaosp.compose.settingslib.PreferencePosition
 import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
 import org.uwuaosp.compose.settingslib.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsScaffold
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
@@ -80,26 +79,28 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
         showBackButton = true,
         onNavigateUp = onNavigateUp,
     ) {
-        SettingsCategory(title = stringResource(R.string.interface_settings_category_fonts))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.interface_settings_category_fonts)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.custom_font_title),
             summary =
                 activeFont?.let { stringResource(R.string.custom_font_summary_active, it) }
                     ?: stringResource(R.string.custom_font_summary_default),
-            position = PreferencePosition.Single,
             iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
             onClick = {
                 fontSettingsLauncher.launch(Intent(context, CustomFontActivity::class.java))
             },
-        )
+                )
+            }
+        }
         SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
 
-        SettingsCategory(title = stringResource(R.string.interface_settings_category_icons))
-        PreferenceRow(
+        SettingsSection(title = stringResource(R.string.interface_settings_category_icons)) {
+            item {
+                PreferenceRow(
             title = stringResource(R.string.system_small_icons_title),
             summary = stringResource(R.string.system_small_icons_summary),
             enabled = !iconOperationRunning,
-            position = PreferencePosition.Single,
             iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_system_small_icons) },
             onClick = { iconMenuExpanded = true },
             trailingContent = {
@@ -160,7 +161,9 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
                     }
                 }
             },
-        )
+                )
+            }
+        }
     }
 }
 

@@ -76,11 +76,8 @@ import org.uwuaosp.compose.settingslib.AppListError
 import org.uwuaosp.compose.settingslib.AppListItem
 import org.uwuaosp.compose.settingslib.AppListLoading
 import org.uwuaosp.compose.settingslib.AppListScaffold
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
-import org.uwuaosp.compose.settingslib.SettingsCategory
+import org.uwuaosp.compose.settingslib.SettingsSectionHeader
 import org.uwuaosp.compose.settingslib.SettingsToolbarActionButton
-import org.uwuaosp.compose.settingslib.preferencePosition
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 
@@ -209,7 +206,7 @@ private fun BackgroundManagementScreen(
         },
     ) {
         item(key = "apps_category") {
-            SettingsCategory(title = stringResource(R.string.background_apps_category))
+            SettingsSectionHeader(title = stringResource(R.string.background_apps_category))
         }
         when {
             loading -> item(key = "loading") { AppListLoading() }
@@ -231,7 +228,8 @@ private fun BackgroundManagementScreen(
                 Column {
                     AppModePreferenceRow(
                         app = app,
-                        position = preferencePosition(index, filteredApps.lastIndex),
+                        index = index,
+                        itemCount = filteredApps.size,
                         onModeSelected = { mode ->
                             if (BackgroundModeSecureSettings.setMode(
                                     context,
@@ -255,9 +253,6 @@ private fun BackgroundManagementScreen(
                             }
                         },
                     )
-                    if (index != filteredApps.lastIndex) {
-                        PreferenceGroupSpacer()
-                    }
                 }
             }
         }
@@ -267,7 +262,8 @@ private fun BackgroundManagementScreen(
 @Composable
 private fun AppModePreferenceRow(
     app: BackgroundAppEntry,
-    position: PreferencePosition,
+    index: Int,
+    itemCount: Int,
     onModeSelected: (Int) -> Unit,
 ) {
     var expanded by remember(app.packageName) { mutableStateOf(false) }
@@ -277,7 +273,8 @@ private fun AppModePreferenceRow(
         label = app.label,
         packageName = app.packageName,
         icon = app.icon.asImageBitmap(),
-        position = position,
+        index = index,
+        itemCount = itemCount,
         enabled = app.configurable,
         onClick = { expanded = true },
     ) {

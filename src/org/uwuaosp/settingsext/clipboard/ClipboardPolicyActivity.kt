@@ -48,10 +48,7 @@ import org.uwuaosp.compose.settingslib.AppListError
 import org.uwuaosp.compose.settingslib.AppListItem
 import org.uwuaosp.compose.settingslib.AppListLoading
 import org.uwuaosp.compose.settingslib.AppListScaffold
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
-import org.uwuaosp.compose.settingslib.SettingsCategory
-import org.uwuaosp.compose.settingslib.preferencePosition
+import org.uwuaosp.compose.settingslib.SettingsSectionHeader
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
@@ -120,7 +117,7 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
         onSearchQueryChange = { query = it },
         onNavigateUp = onNavigateUp,
     ) {
-        item { SettingsCategory(title = stringResource(R.string.clipboard_policy_apps_category)) }
+        item { SettingsSectionHeader(title = stringResource(R.string.clipboard_policy_apps_category)) }
         when {
             loading -> item { AppListLoading() }
             failed ->
@@ -139,7 +136,8 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                     Column {
                         ClipboardPolicyRow(
                             app = app,
-                            position = preferencePosition(index, filtered.lastIndex),
+                            index = index,
+                            itemCount = filtered.size,
                         ) { policy ->
                             if (
                                 ClipboardPolicySecureSettings.setPolicy(
@@ -165,9 +163,6 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
                                     .show()
                             }
                         }
-                        if (index != filtered.lastIndex) {
-                            PreferenceGroupSpacer()
-                        }
                     }
                 }
         }
@@ -177,7 +172,8 @@ private fun ClipboardPolicyScreen(refreshToken: Int, onNavigateUp: () -> Unit) {
 @Composable
 private fun ClipboardPolicyRow(
     app: ClipboardPolicyAppEntry,
-    position: PreferencePosition,
+    index: Int,
+    itemCount: Int,
     onPolicySelected: (Int) -> Unit,
 ) {
     var expanded by remember(app.packageName) { mutableStateOf(false) }
@@ -186,7 +182,8 @@ private fun ClipboardPolicyRow(
         label = app.label,
         packageName = app.packageName,
         icon = app.icon.asImageBitmap(),
-        position = position,
+        index = index,
+        itemCount = itemCount,
         onClick = { expanded = true },
     ) {
         Box {

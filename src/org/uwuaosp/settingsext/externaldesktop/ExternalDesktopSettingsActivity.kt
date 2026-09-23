@@ -21,11 +21,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.uwuaosp.compose.settingslib.MainSwitchPreference
-import org.uwuaosp.compose.settingslib.PreferenceGroupSpacer
-import org.uwuaosp.compose.settingslib.PreferencePosition
-import org.uwuaosp.compose.settingslib.SettingsCategory
 import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
 import org.uwuaosp.compose.settingslib.SettingsScaffold
+import org.uwuaosp.compose.settingslib.SettingsSection
 import org.uwuaosp.compose.settingslib.SettingsTopIntro
 import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
 import org.uwuaosp.settingsext.R
@@ -69,30 +67,32 @@ private fun ExternalDesktopSettingsScreen(onNavigateUp: () -> Unit) {
             },
         )
 
-        SettingsCategory(title = stringResource(R.string.external_desktop_behavior_category))
-        SwitchPreferenceRow(
-            title = stringResource(R.string.external_desktop_blank_internal_title),
-            summary = stringResource(R.string.external_desktop_blank_internal_summary),
-            checked = blankInternalDisplay,
-            enabled = enabled,
-            position = PreferencePosition.Top,
-            onCheckedChange = { value ->
-                blankInternalDisplay = value
-                ExternalDesktopSecureSettings.setBlankInternalDisplay(context, value)
-            },
-        )
-        PreferenceGroupSpacer()
-        SwitchPreferenceRow(
-            title = stringResource(R.string.external_desktop_allow_scrcpy_title),
-            summary = stringResource(R.string.external_desktop_allow_scrcpy_summary),
-            checked = allowScrcpyVirtualDisplay,
-            enabled = enabled,
-            position = PreferencePosition.Bottom,
-            onCheckedChange = { value ->
-                allowScrcpyVirtualDisplay = value
-                ExternalDesktopSecureSettings.setAllowScrcpyVirtualDisplay(context, value)
-            },
-        )
+        SettingsSection(title = stringResource(R.string.external_desktop_behavior_category)) {
+            item {
+                SwitchPreferenceRow(
+                    title = stringResource(R.string.external_desktop_blank_internal_title),
+                    summary = stringResource(R.string.external_desktop_blank_internal_summary),
+                    checked = blankInternalDisplay,
+                    enabled = enabled,
+                    onCheckedChange = { value ->
+                        blankInternalDisplay = value
+                        ExternalDesktopSecureSettings.setBlankInternalDisplay(context, value)
+                    },
+                )
+            }
+            item {
+                SwitchPreferenceRow(
+                    title = stringResource(R.string.external_desktop_allow_scrcpy_title),
+                    summary = stringResource(R.string.external_desktop_allow_scrcpy_summary),
+                    checked = allowScrcpyVirtualDisplay,
+                    enabled = enabled,
+                    onCheckedChange = { value ->
+                        allowScrcpyVirtualDisplay = value
+                        ExternalDesktopSecureSettings.setAllowScrcpyVirtualDisplay(context, value)
+                    },
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
         SettingsFooterLegacy(stringResource(R.string.external_desktop_footer))
