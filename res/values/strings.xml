@@ -126,6 +126,8 @@
     <string name="clipboard_policy_prompt_update_failed">Could not update clipboard access prompts</string>
     <string name="clipboard_policy_apps_category">Apps</string>
     <string name="clipboard_policy_app_policy">Clipboard permission</string>
+    <string name="clipboard_policy_read_write_summary">Read and write: %1$s</string>
+    <string name="clipboard_policy_separate">Separate</string>
     <string name="clipboard_policy_read">Read</string>
     <string name="clipboard_policy_write">Write</string>
     <string name="clipboard_policy_allow">Allow</string>

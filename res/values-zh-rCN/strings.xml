@@ -123,6 +123,8 @@
     <string name="clipboard_policy_prompt_update_failed">无法更新剪贴板访问询问设置</string>
     <string name="clipboard_policy_apps_category">应用</string>
     <string name="clipboard_policy_app_policy">剪贴板权限</string>
+    <string name="clipboard_policy_read_write_summary">读取与写入：%1$s</string>
+    <string name="clipboard_policy_separate">分别设置</string>
     <string name="clipboard_policy_read">读取</string>
     <string name="clipboard_policy_write">写入</string>
     <string name="clipboard_policy_allow">允许</string>
