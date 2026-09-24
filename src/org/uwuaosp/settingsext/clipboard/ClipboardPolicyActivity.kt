@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -219,46 +220,32 @@ private fun ClipboardPolicyRow(
     itemCount: Int,
     onPolicySelected: (Int, Int) -> Unit,
 ) {
-    var readExpanded by remember(app.packageName) { mutableStateOf(false) }
-    var writeExpanded by remember(app.packageName) { mutableStateOf(false) }
+    var expanded by remember(app.packageName) { mutableStateOf(false) }
     AppListItem(
         label = app.label,
         packageName = app.packageName,
         icon = app.icon.asImageBitmap(),
         index = index,
         itemCount = itemCount,
-        onClick = { readExpanded = true },
+        onClick = { expanded = true },
     ) {
-        Column {
-            ClipboardPolicyAction(
-                label = stringResource(R.string.clipboard_policy_read),
-                policy = app.readPolicy,
-                expanded = readExpanded,
-                onExpandedChange = { readExpanded = it },
-                onPolicySelected = {
-                    onPolicySelected(ClipboardPolicySecureSettings.OPERATION_READ, it)
-                },
-            )
-            ClipboardPolicyAction(
-                label = stringResource(R.string.clipboard_policy_write),
-                policy = app.writePolicy,
-                expanded = writeExpanded,
-                onExpandedChange = { writeExpanded = it },
-                onPolicySelected = {
-                    onPolicySelected(ClipboardPolicySecureSettings.OPERATION_WRITE, it)
-                },
-            )
-        }
+        ClipboardPolicyMenu(
+            readPolicy = app.readPolicy,
+            writePolicy = app.writePolicy,
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            onPolicySelected = onPolicySelected,
+        )
     }
 }
 
 @Composable
-private fun ClipboardPolicyAction(
-    label: String,
-    policy: Int,
+private fun ClipboardPolicyMenu(
+    readPolicy: Int,
+    writePolicy: Int,
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
-    onPolicySelected: (Int) -> Unit,
+    onPolicySelected: (Int, Int) -> Unit,
 ) {
     Box {
         Row(
@@ -268,7 +255,14 @@ private fun ClipboardPolicyAction(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "$label: ${clipboardPolicyLabel(policy)}",
+                text = stringResource(
+                    R.string.clipboard_policy_read_write_summary,
+                    if (readPolicy == writePolicy) {
+                        clipboardPolicyLabel(readPolicy)
+                    } else {
+                        stringResource(R.string.clipboard_policy_separate)
+                    },
+                ),
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.labelLarge,
                 maxLines = 1,
@@ -276,7 +270,7 @@ private fun ClipboardPolicyAction(
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_left_down_line),
-                contentDescription = label,
+                contentDescription = stringResource(R.string.clipboard_policy_app_policy),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp),
             )
@@ -290,24 +284,49 @@ private fun ClipboardPolicyAction(
             tonalElevation = 0.dp,
             shadowElevation = 3.dp,
         ) {
-            val policies = listOf(
-                ClipboardPolicySecureSettings.POLICY_ALLOW,
-                ClipboardPolicySecureSettings.POLICY_ASK,
-                ClipboardPolicySecureSettings.POLICY_DENY,
+            ClipboardPolicyMenuSection(
+                label = stringResource(R.string.clipboard_policy_read),
+                operation = ClipboardPolicySecureSettings.OPERATION_READ,
+                policy = readPolicy,
+                onPolicySelected = onPolicySelected,
             )
-            policies.forEachIndexed { index, choice ->
-                ExpressiveModeMenuItem(
-                    text = clipboardPolicyLabel(choice),
-                    selected = policy == choice,
-                    position = index,
-                    itemCount = policies.size,
-                    onClick = {
-                        onExpandedChange(false)
-                        onPolicySelected(choice)
-                    },
-                )
-            }
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+            ClipboardPolicyMenuSection(
+                label = stringResource(R.string.clipboard_policy_write),
+                operation = ClipboardPolicySecureSettings.OPERATION_WRITE,
+                policy = writePolicy,
+                onPolicySelected = onPolicySelected,
+            )
         }
+    }
+}
+
+@Composable
+private fun ClipboardPolicyMenuSection(
+    label: String,
+    operation: Int,
+    policy: Int,
+    onPolicySelected: (Int, Int) -> Unit,
+) {
+    Text(
+        text = label,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.labelLarge,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+    )
+    val policies = listOf(
+        ClipboardPolicySecureSettings.POLICY_ALLOW,
+        ClipboardPolicySecureSettings.POLICY_ASK,
+        ClipboardPolicySecureSettings.POLICY_DENY,
+    )
+    policies.forEachIndexed { index, choice ->
+        ExpressiveModeMenuItem(
+            text = clipboardPolicyLabel(choice),
+            selected = policy == choice,
+            position = index,
+            itemCount = policies.size,
+            onClick = { onPolicySelected(operation, choice) },
+        )
     }
 }
 
