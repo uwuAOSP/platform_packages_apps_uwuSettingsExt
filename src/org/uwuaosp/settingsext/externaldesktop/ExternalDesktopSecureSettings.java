@@ -19,8 +19,6 @@ public final class ExternalDesktopSecureSettings {
     public static void setEnabled(Context context, boolean enabled) {
         Settings.Secure.putInt(context.getContentResolver(),
                 Settings.Secure.UWU_EXTERNAL_DESKTOP_ENABLED, enabled ? 1 : 0);
-        Settings.Secure.putInt(context.getContentResolver(),
-                Settings.Secure.MIRROR_BUILT_IN_DISPLAY, enabled ? 0 : 1);
     }
 
     public static boolean shouldBlankInternalDisplay(Context context) {
