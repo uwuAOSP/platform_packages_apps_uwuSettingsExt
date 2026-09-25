@@ -288,14 +288,20 @@ private fun ClipboardPolicyMenu(
                 label = stringResource(R.string.clipboard_policy_read),
                 operation = ClipboardPolicySecureSettings.OPERATION_READ,
                 policy = readPolicy,
-                onPolicySelected = onPolicySelected,
+                onPolicySelected = { operation, policy ->
+                    onExpandedChange(false)
+                    onPolicySelected(operation, policy)
+                },
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
             ClipboardPolicyMenuSection(
                 label = stringResource(R.string.clipboard_policy_write),
                 operation = ClipboardPolicySecureSettings.OPERATION_WRITE,
                 policy = writePolicy,
-                onPolicySelected = onPolicySelected,
+                onPolicySelected = { operation, policy ->
+                    onExpandedChange(false)
+                    onPolicySelected(operation, policy)
+                },
             )
         }
     }
