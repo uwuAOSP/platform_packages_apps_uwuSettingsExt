@@ -29,7 +29,7 @@ internal class ClipboardPolicyAppRepository(private val context: Context) {
             context, ClipboardPolicySecureSettings.OPERATION_READ)
         val writePolicies = ClipboardPolicySecureSettings.getPolicies(
             context, ClipboardPolicySecureSettings.OPERATION_WRITE)
-        val defaultPolicy = ClipboardPolicySecureSettings.getDefaultPolicy(context)
+        val promptsEnabled = ClipboardPolicySecureSettings.isPromptEnabled(context)
         val userId = UserHandle.myUserId()
         val launchablePackages =
             packageManager
@@ -45,6 +45,7 @@ internal class ClipboardPolicyAppRepository(private val context: Context) {
             .filter { it.packageName in launchablePackages }
             .map { info ->
                 val packageName = info.packageName
+                val defaultPolicy = ClipboardPolicySecureSettings.getDefaultPolicy(promptsEnabled, info)
                 val icon =
                     runCatching {
                             packageManager

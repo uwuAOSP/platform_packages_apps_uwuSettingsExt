@@ -8,9 +8,11 @@
 package org.uwuaosp.settingsext.clipboard;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.ArrayMap;
+import com.android.internal.app.ClipboardAccessPolicy;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -43,8 +45,11 @@ public final class ClipboardPolicySecureSettings {
         UserHandle.myUserId());
   }
 
-  public static int getDefaultPolicy(Context context) {
-    return isPromptEnabled(context) ? POLICY_ASK : POLICY_ALLOW;
+  public static int getDefaultPolicy(boolean promptsEnabled, ApplicationInfo info) {
+    final boolean systemApp =
+        (info.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0;
+    return ClipboardAccessPolicy.shouldAskByDefault(promptsEnabled, systemApp, info.packageName)
+        ? POLICY_ASK : POLICY_ALLOW;
   }
 
   public static synchronized ArrayMap<String, Integer> getPolicies(Context context, int operation) {
