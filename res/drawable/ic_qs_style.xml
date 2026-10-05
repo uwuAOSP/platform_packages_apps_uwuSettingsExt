@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: The uwuAOSP Project
+    SPDX-License-Identifier: Apache-2.0
+
+    Copyright (C) 2026 The uwuAOSP Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#1F1F1F"
+        android:pathData="M0.6,8a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM5.2,8a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM9.8,8a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM14.4,8a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM19,8a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM0.6,16a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM5.2,16a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM9.8,16a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM14.4,16a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0ZM19,16a2.2,2.2 0 1,0 4.4,0a2.2,2.2 0 1,0 -4.4,0Z" />
+</vector>
