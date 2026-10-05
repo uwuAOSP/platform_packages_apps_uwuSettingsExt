@@ -56,6 +56,7 @@ import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
+import org.uwuaosp.settingsext.qsstyle.QSStyleSecureSettings
 
 class InterfaceSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,12 +83,16 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
     var hideGestureHandle by remember(context) {
         mutableStateOf(Settings.Secure.getInt(resolver, Settings.Secure.UWU_HIDE_GESTURE_HANDLE, 0) == 1)
     }
+    var qsStyleCircular by remember(context) {
+        mutableStateOf(QSStyleSecureSettings.isCircular(context))
+    }
     DisposableEffect(context) {
         val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
                 gestureNavigation = isGestureNavigation()
                 hideGestureHandle =
                     Settings.Secure.getInt(resolver, Settings.Secure.UWU_HIDE_GESTURE_HANDLE, 0) == 1
+                qsStyleCircular = QSStyleSecureSettings.isCircular(context)
             }
         }
         resolver.registerContentObserver(
@@ -95,6 +100,9 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
         )
         resolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.NAVIGATION_MODE), false, observer,
+        )
+        resolver.registerContentObserver(
+            Settings.Secure.getUriFor(Settings.Secure.UWU_QS_STYLE), false, observer,
         )
         observer.onChange(false)
         onDispose { resolver.unregisterContentObserver(observer) }
@@ -113,6 +121,24 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
         showBackButton = true,
         onNavigateUp = onNavigateUp,
     ) {
+        SettingsSection(title = stringResource(R.string.interface_settings_category_qs)) {
+            item {
+                SwitchPreferenceRow(
+                    title = stringResource(R.string.qs_style_title),
+                    summary = stringResource(R.string.qs_style_summary),
+                    checked = qsStyleCircular,
+                    iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_qs_style) },
+                    onCheckedChange = { enabled ->
+                        if (QSStyleSecureSettings.setCircular(context, enabled)) {
+                            qsStyleCircular = QSStyleSecureSettings.isCircular(context)
+                        } else {
+                            Toast.makeText(context, R.string.qs_style_update_failed,
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                )
+            }
+        }
         SettingsSection(title = stringResource(R.string.interface_settings_category_navigation)) {
             item {
                 SwitchPreferenceRow(
