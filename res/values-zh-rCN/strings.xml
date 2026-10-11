@@ -33,7 +33,7 @@
     <string name="hide_gesture_handle_summary">仅在手势导航下生效，导航手势仍可使用</string>
     <string name="hide_gesture_handle_update_failed">无法更新小白条显示设置</string>
     <string name="interface_settings_category_qs">快速设置</string>
-    <string name="qs_style_title">圆形磁贴样式</string>
+    <string name="qs_style_title">uwu的磁贴样式</string>
     <string name="qs_style_summary">快速设置与快捷面板使用圆形磁贴，快捷面板为五列布局</string>
     <string name="qs_style_update_failed">无法更新快速设置样式</string>
     <string name="interface_settings_category_fonts">字体</string>
