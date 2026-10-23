@@ -263,9 +263,9 @@ private fun validateKeyboxXml(xml: String): Boolean {
                 }
             }
             numberOfKeyboxes == 1 &&
-                algorithms.containsAll(REQUIRED_KEYBOX_ALGORITHMS) &&
-                privateKeyAlgorithms.containsAll(REQUIRED_KEYBOX_ALGORITHMS) &&
-                REQUIRED_KEYBOX_ALGORITHMS.all { certificateCounts.getOrDefault(it, 0) > 0 }
+                algorithms.isNotEmpty() &&
+                privateKeyAlgorithms.containsAll(algorithms) &&
+                algorithms.all { certificateCounts.getOrDefault(it, 0) > 0 }
         }
         .getOrDefault(false)
 }
@@ -285,5 +285,4 @@ private fun forceStopPackages(context: Context, packageNames: Array<String>) {
 private const val TAG = "KeyAttestationSettings"
 private val KEYBOX_MIME_TYPES = arrayOf("text/xml", "application/xml", "text/plain")
 private val PIF_MIME_TYPES = arrayOf("application/json", "text/json", "text/plain")
-private val REQUIRED_KEYBOX_ALGORITHMS = setOf("ecdsa", "rsa")
 private val PIF_TARGET_PACKAGES = arrayOf("com.google.android.gms", "com.android.vending")
