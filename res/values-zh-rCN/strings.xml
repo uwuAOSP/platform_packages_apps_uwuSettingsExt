@@ -28,10 +28,6 @@
     <string name="settings_ext_lyric_fetch_title">状态栏歌词</string>
     <string name="settings_ext_ai_core_title">uwuAI Core</string>
     <string name="interface_settings_title">界面设置</string>
-    <string name="interface_settings_category_navigation">导航</string>
-    <string name="hide_gesture_handle_title">隐藏手势导航小白条</string>
-    <string name="hide_gesture_handle_summary">仅在手势导航下生效，导航手势仍可使用</string>
-    <string name="hide_gesture_handle_update_failed">无法更新小白条显示设置</string>
     <string name="interface_settings_category_qs">快速设置</string>
     <string name="qs_style_title">uwu的磁贴样式</string>
     <string name="qs_style_summary">快速设置与快捷面板使用圆形磁贴，快捷面板为五列布局</string>
