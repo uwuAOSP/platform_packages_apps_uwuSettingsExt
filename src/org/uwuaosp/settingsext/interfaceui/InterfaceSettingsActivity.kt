@@ -11,11 +11,7 @@
 package org.uwuaosp.settingsext.interfaceui
 
 import android.content.Intent
-import android.database.ContentObserver
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,7 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,7 +47,6 @@ import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.compose.settingslib.SettingsScaffold
 import org.uwuaosp.compose.settingslib.SettingsSection
-import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
@@ -73,34 +67,15 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
     val iconController = remember(context) { PuiSystemIconController(context) }
     val scope = rememberCoroutineScope()
     val resolver = context.contentResolver
-    fun isGestureNavigation() =
-        Settings.Secure.getInt(
-            resolver,
-            Settings.Secure.NAVIGATION_MODE,
-            context.resources.getInteger(com.android.internal.R.integer.config_navBarInteractionMode),
-        ) == 2
-    var gestureNavigation by remember(context) { mutableStateOf(isGestureNavigation()) }
-    var hideGestureHandle by remember(context) {
-        mutableStateOf(Settings.Secure.getInt(resolver, Settings.Secure.UWU_HIDE_GESTURE_HANDLE, 0) == 1)
-    }
     var qsStyleCircular by remember(context) {
         mutableStateOf(QSStyleSecureSettings.isCircular(context))
     }
     DisposableEffect(context) {
         val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
-                gestureNavigation = isGestureNavigation()
-                hideGestureHandle =
-                    Settings.Secure.getInt(resolver, Settings.Secure.UWU_HIDE_GESTURE_HANDLE, 0) == 1
                 qsStyleCircular = QSStyleSecureSettings.isCircular(context)
             }
         }
-        resolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.UWU_HIDE_GESTURE_HANDLE), false, observer,
-        )
-        resolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.NAVIGATION_MODE), false, observer,
-        )
         resolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.UWU_QS_STYLE), false, observer,
         )
@@ -133,27 +108,6 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
                             qsStyleCircular = QSStyleSecureSettings.isCircular(context)
                         } else {
                             Toast.makeText(context, R.string.qs_style_update_failed,
-                                Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                )
-            }
-        }
-        SettingsSection(title = stringResource(R.string.interface_settings_category_navigation)) {
-            item {
-                SwitchPreferenceRow(
-                    title = stringResource(R.string.hide_gesture_handle_title),
-                    summary = stringResource(R.string.hide_gesture_handle_summary),
-                    checked = hideGestureHandle,
-                    enabled = gestureNavigation,
-                    onCheckedChange = { hidden ->
-                        if (Settings.Secure.putInt(
-                                resolver, Settings.Secure.UWU_HIDE_GESTURE_HANDLE,
-                                if (hidden) 1 else 0,
-                            )) {
-                            hideGestureHandle = hidden
-                        } else {
-                            Toast.makeText(context, R.string.hide_gesture_handle_update_failed,
                                 Toast.LENGTH_SHORT).show()
                         }
                     },
