@@ -65,10 +65,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsAppBarScaffold
-import org.uwuaosp.compose.settingslib.SettingsSectionHeader
-import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.preference.PreferenceRow
+import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
+import org.uwuaosp.compose.widget.scaffold.SettingsAppBarScaffold
+import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme

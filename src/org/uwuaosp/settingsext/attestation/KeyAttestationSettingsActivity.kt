@@ -36,10 +36,10 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.io.StringReader
-import org.uwuaosp.compose.settingslib.PreferenceRow
-import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
-import org.uwuaosp.compose.settingslib.SettingsScaffold
-import org.uwuaosp.compose.settingslib.SettingsSection
+import org.uwuaosp.compose.widget.preference.PreferenceRow
+import org.uwuaosp.compose.widget.preference.SettingsSection
+import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
+import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.apppicker.AppSelectionActivity

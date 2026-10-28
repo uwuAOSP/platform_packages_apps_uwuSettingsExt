@@ -25,7 +25,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Box
@@ -47,8 +46,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,15 +62,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.airbnb.lottie.LottieAnimationView
-import org.uwuaosp.compose.settingslib.MainSwitchPreference
-import org.uwuaosp.compose.settingslib.PrimarySwitchPreferenceRow
-import org.uwuaosp.compose.settingslib.PreferenceRow
+import org.uwuaosp.compose.framework.theme.SettingsTheme
+import org.uwuaosp.compose.widget.preference.MainSwitchPreference
+import org.uwuaosp.compose.widget.preference.PreferenceRow
+import org.uwuaosp.compose.widget.preference.PrimarySwitchPreferenceRow
+import org.uwuaosp.compose.widget.preference.SettingsSection
+import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
+import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
+import org.uwuaosp.compose.widget.scaffold.SettingsToolbarActionButton
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
-import org.uwuaosp.compose.settingslib.SettingsScaffold
-import org.uwuaosp.compose.settingslib.SettingsSection
-import org.uwuaosp.compose.settingslib.SettingsToolbarActionButton
-import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
-import org.uwuaosp.compose.settingslib.rememberSettingsTypography
 import org.uwuaosp.settingsext.R
 
 class MomentSettingsActivity : ComponentActivity() {
@@ -90,15 +87,7 @@ class MomentSettingsActivity : ComponentActivity() {
 
 @Composable
 private fun MomentSettingsTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val darkTheme = isSystemInDarkTheme()
-    val colorScheme =
-        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = rememberSettingsTypography(),
-        content = content,
-    )
+    SettingsTheme(content = content)
 }
 
 @Composable

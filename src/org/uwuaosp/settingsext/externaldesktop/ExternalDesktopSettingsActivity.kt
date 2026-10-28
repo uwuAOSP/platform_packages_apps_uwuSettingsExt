@@ -20,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.uwuaosp.compose.settingslib.MainSwitchPreference
-import org.uwuaosp.compose.settingslib.SettingsFooterLegacy
-import org.uwuaosp.compose.settingslib.SettingsScaffold
-import org.uwuaosp.compose.settingslib.SettingsSection
-import org.uwuaosp.compose.settingslib.SettingsTopIntro
-import org.uwuaosp.compose.settingslib.SwitchPreferenceRow
+import org.uwuaosp.compose.widget.preference.MainSwitchPreference
+import org.uwuaosp.compose.widget.preference.SettingsSection
+import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
+import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
+import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.ui.SettingsTopIntro
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 
