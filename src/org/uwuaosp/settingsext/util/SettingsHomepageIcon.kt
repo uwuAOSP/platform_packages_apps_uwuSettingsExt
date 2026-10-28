@@ -30,7 +30,7 @@ import com.google.android.material.color.utilities.Blend
 import com.google.android.material.color.utilities.TonalPalette
 import org.uwuaosp.settingsext.R
 import com.google.android.material.R as MaterialR
-import org.uwuaosp.compose.settingslib.SettingsHomepageIcon as ComposeSettingsHomepageIcon
+import org.uwuaosp.compose.widget.ui.SettingsHomepageIcon as ComposeSettingsHomepageIcon
 
 @Composable
 internal fun SettingsHomepageIcon(

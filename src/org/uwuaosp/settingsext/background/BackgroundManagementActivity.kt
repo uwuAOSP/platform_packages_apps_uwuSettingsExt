@@ -71,13 +71,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.uwuaosp.compose.settingslib.AppListEmpty
-import org.uwuaosp.compose.settingslib.AppListError
-import org.uwuaosp.compose.settingslib.AppListItem
-import org.uwuaosp.compose.settingslib.AppListLoading
-import org.uwuaosp.compose.settingslib.AppListScaffold
-import org.uwuaosp.compose.settingslib.SettingsSectionHeader
-import org.uwuaosp.compose.settingslib.SettingsToolbarActionButton
+import org.uwuaosp.compose.widget.app.AppListEmpty
+import org.uwuaosp.compose.widget.app.AppListError
+import org.uwuaosp.compose.widget.app.AppListItem
+import org.uwuaosp.compose.widget.app.AppListLoading
+import org.uwuaosp.compose.widget.app.AppListScaffold
+import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
+import org.uwuaosp.compose.widget.scaffold.SettingsToolbarActionButton
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 
