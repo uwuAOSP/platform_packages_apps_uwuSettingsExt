@@ -1,32 +1,15 @@
 /*
- * Copyright (C) 2026 The uwuAOSP Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: The uwuAOSP Project
+ * SPDX-License-Identifier: Apache-2.0
  */
-
 package org.uwuaosp.settingsext.appjump;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
-import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
-
-import org.uwuaosp.settingsext.R;
-
-public class AppJumpSettingsActivity extends CollapsingToolbarBaseActivity {
+public class AppJumpSettingsActivity extends Activity {
     private static final String EXTRA_DESTINATION = "destination";
     private static final String EXTRA_CATEGORY = "category";
     private static final String EXTRA_PACKAGE_NAME = "package_name";
@@ -75,8 +58,8 @@ public class AppJumpSettingsActivity extends CollapsingToolbarBaseActivity {
                 .putExtra(EXTRA_TARGET_PACKAGE, targetPackage);
     }
 
-    public static Intent createTargetRuleDetailIntent(Context context, String sourcePackage,
-            String targetPackage) {
+    public static Intent createTargetRuleDetailIntent(
+            Context context, String sourcePackage, String targetPackage) {
         return new Intent(context, AppJumpSettingsActivity.class)
                 .putExtra(EXTRA_DESTINATION, DESTINATION_TARGET_RULE_DETAIL)
                 .putExtra(EXTRA_SOURCE_PACKAGE, sourcePackage)
@@ -86,49 +69,28 @@ public class AppJumpSettingsActivity extends CollapsingToolbarBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(com.android.settingslib.collapsingtoolbar.R.id.content_frame,
-                            createInitialFragment())
-                    .commit();
+        Intent target =
+                new Intent(getIntent())
+                        .setComponent(
+                                new android.content.ComponentName(
+                                        "com.android.settings",
+                                        "com.android.settings.uwu.appjump.AppJumpSettingsActivity"));
+        target.setFlags(
+                target.getFlags()
+                        & ~(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                                | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                                | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION));
+        target.setClipData(null);
+        try {
+            startActivity(target);
+        } catch (android.content.ActivityNotFoundException | SecurityException e) {
+            android.widget.Toast.makeText(
+                            this,
+                            org.uwuaosp.settingsext.R.string.app_policy_load_failed,
+                            android.widget.Toast.LENGTH_SHORT)
+                    .show();
         }
-    }
-
-    private Fragment createInitialFragment() {
-        final Intent intent = getIntent();
-        final String destination = intent.getStringExtra(EXTRA_DESTINATION);
-        if (DESTINATION_APP_DETAIL.equals(destination)) {
-            setTitle(R.string.app_jump_detail_title);
-            return AppJumpAppDetailFragment.newInstance(intent.getStringExtra(EXTRA_PACKAGE_NAME));
-        }
-        if (DESTINATION_ALL_APPS.equals(destination)) {
-            setTitle(R.string.app_jump_all_apps_title);
-            return new AppJumpAllAppsFragment();
-        }
-        if (DESTINATION_TARGET_RULE_DETAIL.equals(destination)) {
-            setTitle(R.string.app_jump_target_rule_detail_title);
-            return AppJumpTargetRuleDetailFragment.newInstance(
-                    intent.getStringExtra(EXTRA_SOURCE_PACKAGE),
-                    intent.getStringExtra(EXTRA_TARGET_PACKAGE));
-        }
-        if (DESTINATION_TARGET_RULES.equals(destination)) {
-            setTitle(R.string.app_jump_target_rules_title);
-            return AppJumpTargetRulesFragment.newInstance(
-                    intent.getStringExtra(EXTRA_SOURCE_PACKAGE));
-        }
-        if (DESTINATION_SOURCE_RULES.equals(destination)) {
-            setTitle(R.string.app_jump_source_rules_title);
-            return AppJumpSourceRulesFragment.newInstance(
-                    intent.getStringExtra(EXTRA_TARGET_PACKAGE));
-        }
-        if (DESTINATION_CATEGORY.equals(destination)) {
-            final int category = intent.getIntExtra(
-                    EXTRA_CATEGORY, AppJumpPolicyBackend.CATEGORY_SOURCE_ASK);
-            setTitle(AppJumpPolicyBackend.getCategoryTitleRes(category));
-            return AppJumpCategoryFragment.newInstance(category);
-        }
-        setTitle(R.string.app_jump_settings_title);
-        return new AppJumpSettingsFragment();
+        finish();
     }
 }

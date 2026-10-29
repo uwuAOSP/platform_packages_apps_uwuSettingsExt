@@ -19,6 +19,8 @@
     package="org.uwuaosp.settingsext">
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.MANAGE_APP_OPS_MODES" />
+    <uses-permission android:name="android.permission.WATCH_APPOPS" />
     <uses-permission android:name="android.permission.ACCESS_SHORTCUTS" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
@@ -60,6 +62,15 @@
             android:exported="false"
             android:label="@string/background_management_title" />
 
+        <activity
+            android:name=".apppolicies.AppPolicyActivity"
+            android:exported="true"
+            android:permission="android.permission.MANAGE_APP_OPS_MODES">
+            <intent-filter>
+                <action android:name="org.uwuaosp.settingsext.action.MANAGE_APP_POLICY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".sensors.SensorPolicyActivity"
             android:exported="false"
@@ -114,7 +125,7 @@
         <activity
             android:name=".appjump.AppJumpSettingsActivity"
             android:exported="false"
-            android:label="@string/app_jump_settings_title" />
+            android:label="@string/settings_ext_app_jump_title" />
 
         <activity
             android:name=".smartsuggestions.SmartSuggestionsClipboardRulesActivity"
