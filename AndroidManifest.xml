@@ -125,7 +125,7 @@
         <activity
             android:name=".appjump.AppJumpSettingsActivity"
             android:exported="false"
-            android:label="@string/app_jump_settings_title" />
+            android:label="@string/settings_ext_app_jump_title" />
 
         <activity
             android:name=".smartsuggestions.SmartSuggestionsClipboardRulesActivity"
