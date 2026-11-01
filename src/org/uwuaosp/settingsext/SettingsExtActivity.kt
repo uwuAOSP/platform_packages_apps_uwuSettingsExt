@@ -48,9 +48,7 @@ import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
 import org.uwuaosp.compose.widget.ui.SettingsIllustrationHeader
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.attestation.KeyAttestationSettingsActivity
-import org.uwuaosp.settingsext.appjump.AppJumpSettingsActivity
 import org.uwuaosp.settingsext.background.BackgroundManagementActivity
-import org.uwuaosp.settingsext.clipboard.ClipboardPolicyActivity
 import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSecureSettings
 import org.uwuaosp.settingsext.externaldesktop.ExternalDesktopSettingsActivity
 import org.uwuaosp.settingsext.interfaceui.InterfaceSettingsActivity
@@ -59,7 +57,6 @@ import org.uwuaosp.settingsext.lyric.LyricSettingsActivity
 import org.uwuaosp.settingsext.moment.MomentSecureSettings
 import org.uwuaosp.settingsext.moment.MomentSettingsActivity
 import org.uwuaosp.settingsext.smartsuggestions.SmartSuggestionsSettingsActivity
-import org.uwuaosp.settingsext.sensors.SensorPolicyActivity
 import org.uwuaosp.settingsext.util.FeatureUtils
 
 class SettingsExtActivity : ComponentActivity() {
@@ -174,15 +171,6 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             },
                 )
             }
-            item {
-                PreferenceRow(
-            title = stringResource(R.string.sensor_policy_title),
-            summary = "",
-            showSummary = false,
-            iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_sensor_policy) },
-            onClick = { context.startActivity(Intent(context, SensorPolicyActivity::class.java)) },
-                )
-            }
             if (FeatureUtils.isMomentSettingsEnabled(context)) {
                 item {
                     PrimarySwitchPreferenceRow(
@@ -268,32 +256,6 @@ private fun SettingsExtHomeScreen(onNavigateUp: () -> Unit) {
             },
             onClick = {
                 context.startActivity(Intent(context, KeyAttestationSettingsActivity::class.java))
-            },
-                )
-            }
-            item {
-                PreferenceRow(
-            title = stringResource(R.string.settings_ext_app_jump_title),
-            summary = "",
-            showSummary = false,
-            iconContent = {
-                SettingsHomepageIcon(iconRes = R.drawable.ic_appjump)
-            },
-            onClick = {
-                context.startActivity(AppJumpSettingsActivity.createIntent(context))
-            },
-                )
-            }
-            item {
-                PreferenceRow(
-            title = stringResource(R.string.clipboard_policy_title),
-            summary = "",
-            showSummary = false,
-            iconContent = {
-                SettingsHomepageIcon(iconRes = R.drawable.ic_clipboard_policy)
-            },
-            onClick = {
-                context.startActivity(Intent(context, ClipboardPolicyActivity::class.java))
             },
                 )
             }
