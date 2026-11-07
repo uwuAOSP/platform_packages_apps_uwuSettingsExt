@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package org.uwuaosp.settingsext.interfaceui
 
 import android.content.Context
@@ -29,23 +31,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,21 +55,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.uwuaosp.compose.widget.expressive.SettingsActionButton
 import org.uwuaosp.compose.widget.preference.PreferenceRow
+import org.uwuaosp.compose.widget.preference.RadioPreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
 import org.uwuaosp.compose.widget.scaffold.SettingsAppBarScaffold
+import org.uwuaosp.compose.widget.ui.SettingsContent
 import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
-import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
+import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 
 class CustomFontActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,8 +84,6 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
     val context = LocalContext.current
     val controller = remember(context) { CustomFontController(context) }
     val scope = rememberCoroutineScope()
-    val navigationBarPadding =
-        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     var fonts by remember { mutableStateOf(controller.preparedFonts()) }
     var selectedId by rememberSaveable { mutableStateOf(fonts.firstOrNull()?.id) }
     var activeFont by remember { mutableStateOf(controller.activeFontName()) }
@@ -129,153 +125,149 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
         showBackButton = true,
         onNavigateUp = onNavigateUp,
     ) { scaffoldPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding =
-                PaddingValues(
-                    start = 16.dp,
-                    top = scaffoldPadding.calculateTopPadding() + 18.dp,
-                    end = 16.dp,
-                    bottom = navigationBarPadding + 18.dp,
-                ),
-        ) {
-            item(key = "preview", contentType = "preview") { FontPreviewCard(selectedFont) }
-            item(key = "source-category", contentType = "category") {
-                SettingsSectionHeader(title = stringResource(R.string.custom_font_source_category))
-            }
-            item(key = "source", contentType = "preference") {
-                PreferenceRow(
-                    title = stringResource(R.string.custom_font_import_title),
-                    summary = stringResource(R.string.custom_font_import_summary),
-                    enabled = !operationRunning,
-                    iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
-                    trailingContent = {
-                        if (operationRunning) {
-                            CircularProgressIndicator(
-                                strokeWidth = 2.dp,
-                                modifier = Modifier.size(24.dp),
-                            )
-                        }
-                    },
-                    onClick = { picker.launch(FONT_MIME_TYPES) },
-                )
-            }
-
-            if (fonts.isNotEmpty()) {
-                item(key = "available-category", contentType = "category") {
+        SettingsContent {
+            LazyColumn(
+                modifier =
+                    Modifier.fillMaxSize()
+                        .padding(scaffoldPadding)
+                        .consumeWindowInsets(scaffoldPadding),
+                contentPadding =
+                    PaddingValues(start = 16.dp, top = 18.dp, end = 16.dp, bottom = 18.dp),
+            ) {
+                item(key = "preview", contentType = "preview") { FontPreviewCard(selectedFont) }
+                item(key = "source-category", contentType = "category") {
                     SettingsSectionHeader(
-                        title = stringResource(R.string.custom_font_available_category)
+                        title = stringResource(R.string.custom_font_source_category)
                     )
                 }
-                itemsIndexed(
-                    items = fonts,
-                    key = { _, font -> font.id },
-                    contentType = { _, _ -> "font" },
-                ) { index, font ->
+                item(key = "source", contentType = "preference") {
                     PreferenceRow(
-                        title = font.displayName,
-                        summary =
-                            stringResource(
-                                R.string.custom_font_candidate_summary,
-                                font.sourceName,
-                                font.weight,
-                                if (font.italic) {
-                                    stringResource(R.string.custom_font_style_italic)
-                                } else {
-                                    stringResource(R.string.custom_font_style_normal)
-                                },
-                            ),
+                        title = stringResource(R.string.custom_font_import_title),
+                        summary = stringResource(R.string.custom_font_import_summary),
                         enabled = !operationRunning,
-                        index = index,
-                        itemCount = fonts.size,
-                        modifier = Modifier
-                            .padding(top = if (index > 0) 2.dp else 0.dp)
-                            .semantics { role = Role.RadioButton },
+                        iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
                         trailingContent = {
-                            RadioButton(selected = selectedId == font.id, onClick = null)
-                        },
-                        onClick = { selectedId = font.id },
-                    )
-                }
-                item(key = "apply", contentType = "action") {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Button(
-                        onClick = {
-                            val font = selectedFont ?: return@Button
-                            scope.launch {
-                                operationRunning = true
-                                val result =
-                                    withContext(Dispatchers.IO) {
-                                        runCatching { controller.install(font) }
-                                            .getOrElse {
-                                                FontOperationResult.Failed(
-                                                    FontManager.RESULT_ERROR_INVALID_FONT_FILE
-                                                )
-                                            }
-                                    }
-                                operationRunning = false
-                                when (result) {
-                                    is FontOperationResult.Success -> {
-                                        activeFont = result.displayName
-                                        showToast(context, R.string.custom_font_apply_success)
-                                    }
-                                    is FontOperationResult.Failed ->
-                                        showErrorToast(
-                                            context,
-                                            fontOperationErrorMessage(result.errorCode),
-                                        )
-                                    FontOperationResult.InvalidFile ->
-                                        showToast(context, R.string.custom_font_file_invalid)
-                                }
+                            if (operationRunning) {
+                                LoadingIndicator(modifier = Modifier.size(24.dp))
                             }
                         },
-                        enabled = selectedFont != null && !operationRunning,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
-                    ) {
-                        Text(stringResource(R.string.custom_font_apply_action))
+                        onClick = { picker.launch(FONT_MIME_TYPES) },
+                    )
+                }
+
+                if (fonts.isNotEmpty()) {
+                    item(key = "available-category", contentType = "category") {
+                        SettingsSectionHeader(
+                            title = stringResource(R.string.custom_font_available_category)
+                        )
+                    }
+                    itemsIndexed(
+                        items = fonts,
+                        key = { _, font -> font.id },
+                        contentType = { _, _ -> "font" },
+                    ) { index, font ->
+                        RadioPreferenceRow(
+                            title = font.displayName,
+                            summary =
+                                stringResource(
+                                    R.string.custom_font_candidate_summary,
+                                    font.sourceName,
+                                    font.weight,
+                                    if (font.italic) {
+                                        stringResource(R.string.custom_font_style_italic)
+                                    } else {
+                                        stringResource(R.string.custom_font_style_normal)
+                                    },
+                                ),
+                            enabled = !operationRunning,
+                            index = index,
+                            itemCount = fonts.size,
+                            modifier = Modifier.padding(top = if (index > 0) 2.dp else 0.dp),
+                            selected = selectedId == font.id,
+                            onSelect = { selectedId = font.id },
+                        )
+                    }
+                    item(key = "apply", contentType = "action") {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        SettingsActionButton(
+                            label = stringResource(R.string.custom_font_apply_action),
+                            onClick = {
+                                val font = selectedFont ?: return@SettingsActionButton
+                                scope.launch {
+                                    operationRunning = true
+                                    val result =
+                                        withContext(Dispatchers.IO) {
+                                            runCatching { controller.install(font) }
+                                                .getOrElse {
+                                                    FontOperationResult.Failed(
+                                                        FontManager.RESULT_ERROR_INVALID_FONT_FILE
+                                                    )
+                                                }
+                                        }
+                                    operationRunning = false
+                                    when (result) {
+                                        is FontOperationResult.Success -> {
+                                            activeFont = result.displayName
+                                            showToast(context, R.string.custom_font_apply_success)
+                                        }
+                                        is FontOperationResult.Failed ->
+                                            showErrorToast(
+                                                context,
+                                                fontOperationErrorMessage(result.errorCode),
+                                            )
+                                        FontOperationResult.InvalidFile ->
+                                            showToast(context, R.string.custom_font_file_invalid)
+                                    }
+                                }
+                            },
+                            enabled = selectedFont != null && !operationRunning,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                } else {
+                    item(key = "empty", contentType = "footer") {
+                        SettingsFooterLegacy(stringResource(R.string.custom_font_empty_summary))
                     }
                 }
-            } else {
-                item(key = "empty", contentType = "footer") {
-                    SettingsFooterLegacy(stringResource(R.string.custom_font_empty_summary))
-                }
-            }
 
-            if (activeFont != null) {
-                item(key = "current-category", contentType = "category") {
-                    SettingsSectionHeader(title = stringResource(R.string.custom_font_current_category))
-                }
-                item(key = "restore", contentType = "preference") {
-                    PreferenceRow(
-                        title = stringResource(R.string.custom_font_restore_title),
-                        summary = stringResource(R.string.custom_font_restore_summary),
-                        enabled = !operationRunning,
-                        onClick = {
-                            scope.launch {
-                                operationRunning = true
-                                val result =
-                                    withContext(Dispatchers.IO) {
-                                        runCatching { controller.restoreDefault() }
-                                            .getOrDefault(
-                                                FontManager.RESULT_ERROR_FAILED_UPDATE_CONFIG
-                                            )
+                if (activeFont != null) {
+                    item(key = "current-category", contentType = "category") {
+                        SettingsSectionHeader(
+                            title = stringResource(R.string.custom_font_current_category)
+                        )
+                    }
+                    item(key = "restore", contentType = "preference") {
+                        PreferenceRow(
+                            title = stringResource(R.string.custom_font_restore_title),
+                            summary = stringResource(R.string.custom_font_restore_summary),
+                            enabled = !operationRunning,
+                            onClick = {
+                                scope.launch {
+                                    operationRunning = true
+                                    val result =
+                                        withContext(Dispatchers.IO) {
+                                            runCatching { controller.restoreDefault() }
+                                                .getOrDefault(
+                                                    FontManager.RESULT_ERROR_FAILED_UPDATE_CONFIG
+                                                )
+                                        }
+                                    operationRunning = false
+                                    if (result == FontManager.RESULT_SUCCESS) {
+                                        activeFont = null
+                                        fonts = emptyList()
+                                        selectedId = null
+                                        showToast(context, R.string.custom_font_restore_success)
+                                    } else {
+                                        showErrorToast(context, fontOperationErrorMessage(result))
                                     }
-                                operationRunning = false
-                                if (result == FontManager.RESULT_SUCCESS) {
-                                    activeFont = null
-                                    fonts = emptyList()
-                                    selectedId = null
-                                    showToast(context, R.string.custom_font_restore_success)
-                                } else {
-                                    showErrorToast(context, fontOperationErrorMessage(result))
                                 }
-                            }
-                        },
-                    )
+                            },
+                        )
+                    }
                 }
-            }
-            item(key = "footer", contentType = "footer") {
-                SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
+                item(key = "footer", contentType = "footer") {
+                    SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
+                }
             }
         }
     }

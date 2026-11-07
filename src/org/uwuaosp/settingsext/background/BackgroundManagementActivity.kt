@@ -29,24 +29,17 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,9 +54,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,6 +67,9 @@ import org.uwuaosp.compose.widget.app.AppListError
 import org.uwuaosp.compose.widget.app.AppListItem
 import org.uwuaosp.compose.widget.app.AppListLoading
 import org.uwuaosp.compose.widget.app.AppListScaffold
+import org.uwuaosp.compose.widget.menu.SettingsDropdownMenu
+import org.uwuaosp.compose.widget.menu.SettingsMenuGroup
+import org.uwuaosp.compose.widget.menu.SettingsMenuItem
 import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
 import org.uwuaosp.compose.widget.scaffold.SettingsToolbarActionButton
 import org.uwuaosp.settingsext.R
@@ -85,17 +79,19 @@ class BackgroundManagementActivity : ComponentActivity() {
     private val refreshToken = mutableIntStateOf(0)
     private var observersRegistered = false
 
-    private val packageReceiver = object : BroadcastReceiver() {
+    private val packageReceiver =
+        object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             requestRefresh()
         }
-    }
+        }
 
-    private val settingsObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+    private val settingsObserver =
+        object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
             requestRefresh()
         }
-    }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -280,14 +276,14 @@ private fun AppModePreferenceRow(
     ) {
         Box {
             Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable(
-                        enabled = app.configurable,
-                        role = Role.Button,
-                        onClick = { expanded = true },
-                    )
-                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                modifier =
+                    Modifier.clip(RoundedCornerShape(20.dp))
+                        .clickable(
+                            enabled = app.configurable,
+                            role = Role.Button,
+                            onClick = { expanded = true },
+                        )
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -304,108 +300,29 @@ private fun AppModePreferenceRow(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.widthIn(min = 180.dp),
-                shape = RoundedCornerShape(16.dp),
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                tonalElevation = 0.dp,
-                shadowElevation = 3.dp,
-            ) {
-                val modes = listOf(
-                    BackgroundModeSecureSettings.MODE_DEFAULT,
-                    BackgroundModeSecureSettings.MODE_TOMBSTONE,
-                    BackgroundModeSecureSettings.MODE_FULL,
-                )
-                modes.forEachIndexed { index, mode ->
-                    ExpressiveModeMenuItem(
-                        text = backgroundModeLabel(mode),
-                        selected = app.mode == mode,
-                        position = index,
-                        itemCount = modes.size,
-                        onClick = {
-                            expanded = false
-                            onModeSelected(mode)
-                        },
-                    )
+            SettingsDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                SettingsMenuGroup {
+                    val modes =
+                        listOf(
+                            BackgroundModeSecureSettings.MODE_DEFAULT,
+                            BackgroundModeSecureSettings.MODE_TOMBSTONE,
+                            BackgroundModeSecureSettings.MODE_FULL,
+                        )
+                    modes.forEachIndexed { index, mode ->
+                        SettingsMenuItem(
+                            text = backgroundModeLabel(mode),
+                            selected = app.mode == mode,
+                            index = index,
+                            itemCount = modes.size,
+                            onClick = {
+                                expanded = false
+                                onModeSelected(mode)
+                            },
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-internal fun ExpressiveModeMenuItem(
-    text: String,
-    selected: Boolean,
-    position: Int,
-    itemCount: Int,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-) {
-    val shape = if (selected) {
-        RoundedCornerShape(12.dp)
-    } else {
-        when (position) {
-            0 -> RoundedCornerShape(
-                topStart = 12.dp,
-                topEnd = 12.dp,
-                bottomStart = 4.dp,
-                bottomEnd = 4.dp,
-            )
-            itemCount - 1 -> RoundedCornerShape(
-                topStart = 4.dp,
-                topEnd = 4.dp,
-                bottomStart = 12.dp,
-                bottomEnd = 12.dp,
-            )
-            else -> RoundedCornerShape(4.dp)
-        }
-    }
-    val contentColor = if (selected) {
-        MaterialTheme.colorScheme.onPrimaryContainer
-    } else {
-        MaterialTheme.colorScheme.onSurface
-    }
-
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 4.dp, vertical = 1.dp)
-            .fillMaxWidth()
-            .alpha(if (enabled) 1f else 0.38f)
-            .clip(shape)
-            .background(
-                if (selected) {
-                    MaterialTheme.colorScheme.primaryContainer
-                } else {
-                    Color.Transparent
-                },
-            )
-            .selectable(
-                selected = selected,
-                enabled = enabled,
-                role = Role.RadioButton,
-                onClick = onClick,
-            )
-            .heightIn(min = 44.dp)
-            .padding(horizontal = 12.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (selected) {
-            Icon(
-                imageVector = Icons.Filled.Check,
-                contentDescription = null,
-                tint = contentColor,
-                modifier = Modifier.size(20.dp),
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-        }
-        Text(
-            text = text,
-            color = contentColor,
-            style = MaterialTheme.typography.bodyLarge,
-        )
     }
 }
 

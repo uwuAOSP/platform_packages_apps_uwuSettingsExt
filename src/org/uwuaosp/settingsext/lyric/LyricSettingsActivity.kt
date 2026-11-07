@@ -21,32 +21,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import org.uwuaosp.compose.widget.editor.SettingsChoiceDialog
 import org.uwuaosp.compose.widget.editor.TextInputPreferenceDialog
 import org.uwuaosp.compose.widget.preference.MainSwitchPreference
 import org.uwuaosp.compose.widget.preference.PreferenceRow
@@ -252,48 +240,17 @@ private fun LyricPositionDialog(
     onPositionSelected: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    AlertDialog(
+    val positions =
+        listOf(LyricSecureSettings.POSITION_OVERLAY, LyricSecureSettings.POSITION_CLOCK_RIGHT)
+    SettingsChoiceDialog(
+        title = stringResource(R.string.lyric_position_title),
+        options =
+            listOf(
+                stringResource(R.string.lyric_position_entry_overlay),
+                stringResource(R.string.lyric_position_entry_clock_right),
+            ),
+        selectedIndex = positions.indexOf(selectedPosition),
+        onSelect = { onPositionSelected(positions[it]) },
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.lyric_position_title)) },
-        text = {
-            Column(modifier = Modifier.selectableGroup()) {
-                LyricPositionOption(
-                    title = stringResource(R.string.lyric_position_entry_overlay),
-                    selected = selectedPosition == LyricSecureSettings.POSITION_OVERLAY,
-                    onClick = { onPositionSelected(LyricSecureSettings.POSITION_OVERLAY) },
-                )
-                LyricPositionOption(
-                    title = stringResource(R.string.lyric_position_entry_clock_right),
-                    selected = selectedPosition == LyricSecureSettings.POSITION_CLOCK_RIGHT,
-                    onClick = { onPositionSelected(LyricSecureSettings.POSITION_CLOCK_RIGHT) },
-                )
-            }
-        },
-        confirmButton = {},
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        },
     )
-}
-
-@Composable
-private fun LyricPositionOption(title: String, selected: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .heightIn(min = 56.dp)
-            .padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        RadioButton(selected = selected, onClick = null)
-        Text(
-            text = title,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 16.dp),
-        )
-    }
 }

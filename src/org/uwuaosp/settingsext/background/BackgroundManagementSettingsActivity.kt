@@ -32,9 +32,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -51,20 +48,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.uwuaosp.compose.widget.preference.PreferenceRow
-import org.uwuaosp.compose.widget.preference.SettingsSection
-import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
-import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
-import org.uwuaosp.settingsext.util.SettingsHomepageIcon
-import org.uwuaosp.settingsext.R
-import org.uwuaosp.settingsext.SettingsExtTheme
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.uwuaosp.compose.widget.menu.SettingsDropdownMenu
+import org.uwuaosp.compose.widget.menu.SettingsMenuGroup
+import org.uwuaosp.compose.widget.menu.SettingsMenuItem
+import org.uwuaosp.compose.widget.preference.PreferenceRow
+import org.uwuaosp.compose.widget.preference.SettingsSection
+import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
+import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
+import org.uwuaosp.settingsext.R
+import org.uwuaosp.settingsext.SettingsExtTheme
+import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 
 class BackgroundManagementSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,27 +94,29 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
     val kernelStatus = remember { BackgroundModeSecureSettings.getKernelStatus() }
     var backendMenuExpanded by remember { mutableStateOf(false) }
     var exporting by remember { mutableStateOf(false) }
-    val exportLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("text/plain"),
-    ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        exporting = true
-        scope.launch {
-            val result = withContext(Dispatchers.IO) {
-                runCatching { BackgroundLogExporter.export(context, uri) }
+    val exportLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
+            uri ->
+            if (uri == null) return@rememberLauncherForActivityResult
+            exporting = true
+            scope.launch {
+                val result =
+                    withContext(Dispatchers.IO) {
+                        runCatching { BackgroundLogExporter.export(context, uri) }
+                    }
+                exporting = false
+                Toast.makeText(
+                        context,
+                        if (result.isSuccess) {
+                            R.string.background_log_exported
+                        } else {
+                            R.string.background_log_export_failed
+                        },
+                        Toast.LENGTH_SHORT,
+                    )
+                    .show()
             }
-            exporting = false
-            Toast.makeText(
-                context,
-                if (result.isSuccess) {
-                    R.string.background_log_exported
-                } else {
-                    R.string.background_log_export_failed
-                },
-                Toast.LENGTH_SHORT,
-            ).show()
         }
-    }
 
     SettingsScaffold(
         title = stringResource(R.string.background_settings_title),
@@ -124,14 +126,14 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
         SettingsSection(title = stringResource(R.string.background_display_category)) {
             item {
                 SwitchPreferenceRow(
-            title = stringResource(R.string.background_show_system_apps),
-            summary = "",
-            showSummary = false,
-            checked = showSystemApps,
-            onCheckedChange = { show ->
-                showSystemApps = show
-                BackgroundListPreferences.setShowSystemApps(context, show)
-            },
+                    title = stringResource(R.string.background_show_system_apps),
+                    summary = "",
+                    showSummary = false,
+                    checked = showSystemApps,
+                    onCheckedChange = { show ->
+                        showSystemApps = show
+                        BackgroundListPreferences.setShowSystemApps(context, show)
+                    },
                 )
             }
         }
@@ -140,100 +142,111 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
         SettingsSection(title = stringResource(R.string.background_behavior_category)) {
             item {
                 SwitchPreferenceRow(
-            title = stringResource(R.string.background_ignore_task_removal),
-            summary = stringResource(R.string.background_ignore_task_removal_summary),
-            showSummary = true,
-            checked = ignoreTaskRemoval,
-            onCheckedChange = { enabled ->
-                if (BackgroundModeSecureSettings.setIgnoreTaskRemovalEnabled(context, enabled)) {
-                    ignoreTaskRemoval = enabled
-                } else {
-                    Toast.makeText(
-                        context,
-                        R.string.background_setting_update_failed,
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            },
+                    title = stringResource(R.string.background_ignore_task_removal),
+                    summary = stringResource(R.string.background_ignore_task_removal_summary),
+                    showSummary = true,
+                    checked = ignoreTaskRemoval,
+                    onCheckedChange = { enabled ->
+                        if (
+                            BackgroundModeSecureSettings.setIgnoreTaskRemovalEnabled(
+                                context,
+                                enabled,
+                            )
+                        ) {
+                            ignoreTaskRemoval = enabled
+                        } else {
+                            Toast.makeText(
+                                    context,
+                                    R.string.background_setting_update_failed,
+                                    Toast.LENGTH_SHORT,
+                                )
+                                .show()
+                        }
+                    },
                 )
             }
             item {
                 PreferenceRow(
-            title = stringResource(R.string.background_freezer_backend_title),
-            summary = "",
-            showSummary = false,
-            onClick = { backendMenuExpanded = true },
-            trailingContent = {
-                Box {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = freezerBackendLabel(freezerBackend),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_left_down_line),
-                            contentDescription = stringResource(
-                                R.string.background_freezer_backend_title,
-                            ),
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(24.dp),
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = backendMenuExpanded,
-                        onDismissRequest = { backendMenuExpanded = false },
-                        modifier = Modifier.widthIn(min = 200.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        tonalElevation = 0.dp,
-                        shadowElevation = 3.dp,
-                    ) {
-                        val backends = listOf(
-                            BackgroundModeSecureSettings.FREEZER_BACKEND_AUTO,
-                            BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP1,
-                            BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP2,
-                            BackgroundModeSecureSettings.FREEZER_BACKEND_HYBRID,
-                        )
-                        backends.forEachIndexed { index, backend ->
-                            val enabled = when (backend) {
-                                BackgroundModeSecureSettings.FREEZER_BACKEND_AUTO -> true
-                                BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP1 ->
-                                    kernelStatus.cgroup1Freezer
-                                BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP2 ->
-                                    kernelStatus.cgroup2
-                                BackgroundModeSecureSettings.FREEZER_BACKEND_HYBRID ->
-                                    kernelStatus.cgroup1Freezer && kernelStatus.cgroup2
-                                else -> false
+                    title = stringResource(R.string.background_freezer_backend_title),
+                    summary = "",
+                    showSummary = false,
+                    onClick = { backendMenuExpanded = true },
+                    trailingContent = {
+                        Box {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = freezerBackendLabel(freezerBackend),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                                    contentDescription =
+                                        stringResource(R.string.background_freezer_backend_title),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp),
+                                )
                             }
-                            ExpressiveModeMenuItem(
-                                text = freezerBackendLabel(backend),
-                                selected = freezerBackend == backend,
-                                position = index,
-                                itemCount = backends.size,
-                                enabled = enabled,
-                                onClick = {
-                                    backendMenuExpanded = false
-                                    if (BackgroundModeSecureSettings.setFreezerBackend(
-                                            context,
-                                            backend,
+                            SettingsDropdownMenu(
+                                expanded = backendMenuExpanded,
+                                onDismissRequest = { backendMenuExpanded = false },
+                            ) {
+                                SettingsMenuGroup {
+                                    val backends =
+                                        listOf(
+                                            BackgroundModeSecureSettings.FREEZER_BACKEND_AUTO,
+                                            BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP1,
+                                            BackgroundModeSecureSettings.FREEZER_BACKEND_CGROUP2,
+                                            BackgroundModeSecureSettings.FREEZER_BACKEND_HYBRID,
                                         )
-                                    ) {
-                                        freezerBackend = backend
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            R.string.background_setting_update_failed,
-                                            Toast.LENGTH_SHORT,
-                                        ).show()
+                                    backends.forEachIndexed { index, backend ->
+                                        val enabled =
+                                            when (backend) {
+                                                BackgroundModeSecureSettings.FREEZER_BACKEND_AUTO ->
+                                                    true
+                                                BackgroundModeSecureSettings
+                                                    .FREEZER_BACKEND_CGROUP1 ->
+                                                    kernelStatus.cgroup1Freezer
+                                                BackgroundModeSecureSettings
+                                                    .FREEZER_BACKEND_CGROUP2 -> kernelStatus.cgroup2
+                                                BackgroundModeSecureSettings
+                                                    .FREEZER_BACKEND_HYBRID ->
+                                                    kernelStatus.cgroup1Freezer &&
+                                                        kernelStatus.cgroup2
+                                                else -> false
+                                            }
+                                        SettingsMenuItem(
+                                            text = freezerBackendLabel(backend),
+                                            selected = freezerBackend == backend,
+                                            index = index,
+                                            itemCount = backends.size,
+                                            enabled = enabled,
+                                            onClick = {
+                                                backendMenuExpanded = false
+                                                if (
+                                                    BackgroundModeSecureSettings.setFreezerBackend(
+                                                        context,
+                                                        backend,
+                                                    )
+                                                ) {
+                                                    freezerBackend = backend
+                                                } else {
+                                                    Toast.makeText(
+                                                            context,
+                                                            R.string
+                                                                .background_setting_update_failed,
+                                                            Toast.LENGTH_SHORT,
+                                                        )
+                                                        .show()
+                                                }
+                                            },
+                                        )
                                     }
-                                },
-                            )
+                                }
+                            }
                         }
-                    }
-                }
-            },
+                    },
                 )
             }
         }
@@ -242,17 +255,18 @@ private fun BackgroundManagementSettingsScreen(onNavigateUp: () -> Unit) {
         SettingsSection(title = stringResource(R.string.background_diagnostics_category)) {
             item {
                 PreferenceRow(
-            title = stringResource(R.string.background_export_logs),
-            summary = "",
-            showSummary = false,
-            enabled = !exporting,
-            iconContent = {
-                SettingsHomepageIcon(iconRes = R.drawable.ic_background_log_description)
-            },
-            onClick = {
-                val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
-                exportLauncher.launch("uwu-background-$timestamp.log")
-            },
+                    title = stringResource(R.string.background_export_logs),
+                    summary = "",
+                    showSummary = false,
+                    enabled = !exporting,
+                    iconContent = {
+                        SettingsHomepageIcon(iconRes = R.drawable.ic_background_log_description)
+                    },
+                    onClick = {
+                        val timestamp =
+                            SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
+                        exportLauncher.launch("uwu-background-$timestamp.log")
+                    },
                 )
             }
         }

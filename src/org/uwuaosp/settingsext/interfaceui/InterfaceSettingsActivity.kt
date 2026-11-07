@@ -27,9 +27,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,16 +44,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.uwuaosp.compose.widget.menu.SettingsDropdownMenu
+import org.uwuaosp.compose.widget.menu.SettingsMenuGroup
+import org.uwuaosp.compose.widget.menu.SettingsMenuItem
 import org.uwuaosp.compose.widget.preference.PreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
 import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
-import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
-import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
 import org.uwuaosp.settingsext.qsstyle.QSStyleSecureSettings
+import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 
 class InterfaceSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,17 +72,19 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
     val iconController = remember(context) { PuiSystemIconController(context) }
     val scope = rememberCoroutineScope()
     val resolver = context.contentResolver
-    var qsStyleCircular by remember(context) {
-        mutableStateOf(QSStyleSecureSettings.isCircular(context))
-    }
+    var qsStyleCircular by
+        remember(context) { mutableStateOf(QSStyleSecureSettings.isCircular(context)) }
     DisposableEffect(context) {
-        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+        val observer =
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
                 qsStyleCircular = QSStyleSecureSettings.isCircular(context)
             }
-        }
+            }
         resolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.UWU_QS_STYLE), false, observer,
+            Settings.Secure.getUriFor(Settings.Secure.UWU_QS_STYLE),
+            false,
+            observer,
         )
         observer.onChange(false)
         onDispose { resolver.unregisterContentObserver(observer) }
@@ -113,8 +114,12 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
                         if (QSStyleSecureSettings.setCircular(context, enabled)) {
                             qsStyleCircular = QSStyleSecureSettings.isCircular(context)
                         } else {
-                            Toast.makeText(context, R.string.qs_style_update_failed,
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                    context,
+                                    R.string.qs_style_update_failed,
+                                    Toast.LENGTH_SHORT,
+                                )
+                                .show()
                         }
                     },
                 )
@@ -123,14 +128,14 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
         SettingsSection(title = stringResource(R.string.interface_settings_category_fonts)) {
             item {
                 PreferenceRow(
-            title = stringResource(R.string.custom_font_title),
-            summary =
-                activeFont?.let { stringResource(R.string.custom_font_summary_active, it) }
-                    ?: stringResource(R.string.custom_font_summary_default),
-            iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
-            onClick = {
-                fontSettingsLauncher.launch(Intent(context, CustomFontActivity::class.java))
-            },
+                    title = stringResource(R.string.custom_font_title),
+                    summary =
+                        activeFont?.let { stringResource(R.string.custom_font_summary_active, it) }
+                            ?: stringResource(R.string.custom_font_summary_default),
+                    iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_custom_font) },
+                    onClick = {
+                        fontSettingsLauncher.launch(Intent(context, CustomFontActivity::class.java))
+                    },
                 )
             }
         }
@@ -139,69 +144,72 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
         SettingsSection(title = stringResource(R.string.interface_settings_category_icons)) {
             item {
                 PreferenceRow(
-            title = stringResource(R.string.system_small_icons_title),
-            summary = stringResource(R.string.system_small_icons_summary),
-            enabled = !iconOperationRunning,
-            iconContent = { SettingsHomepageIcon(iconRes = R.drawable.ic_system_small_icons) },
-            onClick = { iconMenuExpanded = true },
-            trailingContent = {
-                Box {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = systemIconStyleLabel(activeIconStyle),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_left_down_line),
-                            contentDescription = stringResource(R.string.system_small_icons_title),
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(24.dp),
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = iconMenuExpanded,
-                        onDismissRequest = { iconMenuExpanded = false },
-                        modifier = Modifier.widthIn(min = 200.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                        tonalElevation = 0.dp,
-                        shadowElevation = 3.dp,
-                    ) {
-                        val styles = listOf(SystemIconStyle.DEFAULT, SystemIconStyle.PUI)
-                        styles.forEachIndexed { index, style ->
-                            ExpressiveModeMenuItem(
-                                text = systemIconStyleLabel(style),
-                                selected = activeIconStyle == style,
-                                position = index,
-                                itemCount = styles.size,
-                                onClick = {
-                                    iconMenuExpanded = false
-                                    if (activeIconStyle == style) return@ExpressiveModeMenuItem
-                                    scope.launch {
-                                        iconOperationRunning = true
-                                        try {
-                                            if (iconController.setStyle(style)) {
-                                                activeIconStyle = style
-                                            } else {
-                                                Toast.makeText(
-                                                        context,
-                                                        R.string.system_small_icons_update_failed,
-                                                        Toast.LENGTH_SHORT,
-                                                    )
-                                                    .show()
-                                            }
-                                        } finally {
-                                            iconOperationRunning = false
-                                        }
+                    title = stringResource(R.string.system_small_icons_title),
+                    summary = stringResource(R.string.system_small_icons_summary),
+                    enabled = !iconOperationRunning,
+                    iconContent = {
+                        SettingsHomepageIcon(iconRes = R.drawable.ic_system_small_icons)
+                    },
+                    onClick = { iconMenuExpanded = true },
+                    trailingContent = {
+                        Box {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = systemIconStyleLabel(activeIconStyle),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                                    contentDescription =
+                                        stringResource(R.string.system_small_icons_title),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp),
+                                )
+                            }
+                            SettingsDropdownMenu(
+                                expanded = iconMenuExpanded,
+                                onDismissRequest = { iconMenuExpanded = false },
+                            ) {
+                                SettingsMenuGroup {
+                                    val styles =
+                                        listOf(SystemIconStyle.DEFAULT, SystemIconStyle.PUI)
+                                    styles.forEachIndexed { index, style ->
+                                        SettingsMenuItem(
+                                            text = systemIconStyleLabel(style),
+                                            selected = activeIconStyle == style,
+                                            index = index,
+                                            itemCount = styles.size,
+                                            onClick = {
+                                                iconMenuExpanded = false
+                                                if (activeIconStyle == style)
+                                                    return@SettingsMenuItem
+                                                scope.launch {
+                                                    iconOperationRunning = true
+                                                    try {
+                                                        if (iconController.setStyle(style)) {
+                                                            activeIconStyle = style
+                                                        } else {
+                                                            Toast.makeText(
+                                                                    context,
+                                                                    R.string
+                                                                        .system_small_icons_update_failed,
+                                                                    Toast.LENGTH_SHORT,
+                                                                )
+                                                                .show()
+                                                        }
+                                                    } finally {
+                                                        iconOperationRunning = false
+                                                    }
+                                                }
+                                            },
+                                        )
                                     }
-                                },
-                            )
+                                }
+                            }
                         }
-                    }
-                }
-            },
+                    },
                 )
             }
         }
