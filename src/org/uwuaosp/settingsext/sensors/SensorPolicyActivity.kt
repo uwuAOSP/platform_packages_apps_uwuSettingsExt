@@ -19,7 +19,7 @@ class SensorPolicyActivity : Activity() {
                 component =
                     ComponentName(
                         "com.android.settings",
-                        "com.android.settings.uwu.sensors.SensorPolicyActivity",
+                        "org.uwuaosp.appops.sensors.SensorPolicyActivity",
                     )
                 flags =
                     flags and

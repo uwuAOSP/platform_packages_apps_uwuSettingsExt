@@ -74,7 +74,7 @@ public class AppJumpSettingsActivity extends Activity {
                         .setComponent(
                                 new android.content.ComponentName(
                                         "com.android.settings",
-                                        "com.android.settings.uwu.appjump.AppJumpSettingsActivity"));
+                                        "org.uwuaosp.appops.appjump.AppJumpSettingsActivity"));
         target.setFlags(
                 target.getFlags()
                         & ~(Intent.FLAG_GRANT_READ_URI_PERMISSION

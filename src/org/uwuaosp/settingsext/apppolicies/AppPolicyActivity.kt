@@ -19,7 +19,7 @@ class AppPolicyActivity : Activity() {
                 component =
                     ComponentName(
                         "com.android.settings",
-                        "com.android.settings.uwu.apppolicies.AppPolicyActivity",
+                        "org.uwuaosp.appops.AppPolicyActivity",
                     )
                 flags =
                     flags and

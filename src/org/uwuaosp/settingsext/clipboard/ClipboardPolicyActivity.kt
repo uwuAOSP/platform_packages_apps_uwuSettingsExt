@@ -19,7 +19,7 @@ class ClipboardPolicyActivity : Activity() {
                 component =
                     ComponentName(
                         "com.android.settings",
-                        "com.android.settings.uwu.clipboard.ClipboardPolicyActivity",
+                        "org.uwuaosp.appops.clipboard.ClipboardPolicyActivity",
                     )
                 flags =
                     flags and
