@@ -38,10 +38,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +60,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -70,6 +75,7 @@ import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
 import org.uwuaosp.compose.widget.scaffold.SettingsToolbarActionButton
+import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 
@@ -96,6 +102,10 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
     var momentEnabled by remember {
         mutableStateOf(MomentSecureSettings.isEnabled(context, false))
     }
+    var fixedAspectRatio by remember {
+        mutableStateOf(MomentSecureSettings.isFixedAspectRatio(context))
+    }
+    var aspectRatioMenuExpanded by remember { mutableStateOf(false) }
     var arcGestureEnabled by remember {
         mutableStateOf(MomentSecureSettings.isArcGestureEnabled(context, true))
     }
@@ -212,6 +222,65 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
         SettingsSection(title = stringResource(R.string.moment_section_experience)) {
+            item {
+                PreferenceRow(
+                    title = stringResource(R.string.moment_aspect_ratio_title),
+                    summary = "",
+                    showSummary = false,
+                    enabled = momentEnabled,
+                    onClick = { aspectRatioMenuExpanded = true },
+                    trailingContent = {
+                        Box {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = stringResource(
+                                        if (fixedAspectRatio) R.string.moment_aspect_ratio_fixed
+                                        else R.string.moment_aspect_ratio_device,
+                                    ),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_arrow_left_down_line),
+                                    contentDescription = stringResource(
+                                        R.string.moment_aspect_ratio_title,
+                                    ),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp),
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = aspectRatioMenuExpanded && momentEnabled,
+                                onDismissRequest = { aspectRatioMenuExpanded = false },
+                                modifier = Modifier.widthIn(min = 200.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                                tonalElevation = 0.dp,
+                                shadowElevation = 3.dp,
+                            ) {
+                                val ratios = listOf(false, true)
+                                ratios.forEachIndexed { index, fixed ->
+                                    ExpressiveModeMenuItem(
+                                        text = stringResource(
+                                            if (fixed) R.string.moment_aspect_ratio_fixed
+                                            else R.string.moment_aspect_ratio_device,
+                                        ),
+                                        selected = fixedAspectRatio == fixed,
+                                        position = index,
+                                        itemCount = ratios.size,
+                                        onClick = {
+                                            MomentSecureSettings.setFixedAspectRatio(context, fixed)
+                                            fixedAspectRatio = fixed
+                                            aspectRatioMenuExpanded = false
+                                        },
+                                    )
+                                }
+                            }
+                        }
+                    },
+                )
+            }
             item {
                 PreferenceRow(
             title = stringResource(R.string.moment_launch_title),

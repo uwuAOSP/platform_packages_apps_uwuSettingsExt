@@ -322,4 +322,7 @@
         <item quantity="other">%d excluded apps</item>
     </plurals>
 
+    <string name="moment_aspect_ratio_title">Window aspect ratio</string>
+    <string name="moment_aspect_ratio_device">Device ratio</string>
+    <string name="moment_aspect_ratio_fixed">16:9</string>
 </resources>

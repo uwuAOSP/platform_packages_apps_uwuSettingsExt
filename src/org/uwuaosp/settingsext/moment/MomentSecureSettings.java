@@ -43,6 +43,15 @@ public final class MomentSecureSettings {
                 context, Settings.Secure.MOMENT_ENABLED, defaultValue);
     }
 
+    public static boolean isFixedAspectRatio(Context context) {
+        return SettingsUtils.getSecureBoolean(
+                context, Settings.Secure.MOMENT_FIXED_ASPECT_RATIO, false);
+    }
+
+    public static void setFixedAspectRatio(Context context, boolean fixed) {
+        SettingsUtils.putSecureBoolean(context, Settings.Secure.MOMENT_FIXED_ASPECT_RATIO, fixed);
+    }
+
     public static void setArcGestureEnabled(Context context, boolean enabled) {
         SettingsUtils.putSecureBoolean(
                 context, Settings.Secure.MOMENT_ARC_GESTURE_ENABLED, enabled);
