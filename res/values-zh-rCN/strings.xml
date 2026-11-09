@@ -20,6 +20,9 @@
     <string name="settings_ext_category_system_interface">系统与界面</string>
     <string name="settings_ext_category_privacy_security">隐私与安全</string>
     <string name="settings_ext_category_intelligence">智能功能</string>
+    <string name="settings_ext_category_system_interface_summary">小窗、桌面个性化与界面设置</string>
+    <string name="settings_ext_category_intelligence_summary">智能建议与识别</string>
+    <string name="settings_ext_category_privacy_security_summary">Keybox伪装设置</string>
     <string name="settings_ext_prism_title">Prism</string>
     <string name="settings_ext_key_attestation_title">伪装设置</string>
     <string name="settings_ext_app_jump_title">应用跳转权限</string>
