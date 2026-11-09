@@ -20,6 +20,9 @@
     <string name="settings_ext_category_system_interface">System &amp; interface</string>
     <string name="settings_ext_category_privacy_security">Privacy &amp; security</string>
     <string name="settings_ext_category_intelligence">Intelligence</string>
+    <string name="settings_ext_category_system_interface_summary">Freeform windows, home screen personalization and interface settings</string>
+    <string name="settings_ext_category_intelligence_summary">Smart suggestions and recognition</string>
+    <string name="settings_ext_category_privacy_security_summary">Keybox spoofing settings</string>
     <string name="settings_ext_prism_title">Prism</string>
     <string name="settings_ext_key_attestation_title">Spoofing Settings</string>
     <string name="settings_ext_app_jump_title">App Jump Permissions</string>

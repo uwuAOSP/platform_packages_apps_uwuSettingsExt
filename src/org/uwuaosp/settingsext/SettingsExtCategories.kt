@@ -57,10 +57,26 @@ import org.uwuaosp.compose.widget.scaffold.SettingsAppBarScaffold
 import org.uwuaosp.compose.widget.ui.SettingsContent
 import org.uwuaosp.compose.widget.ui.SettingsIllustrationHeader
 
-internal enum class SettingsExtCategory(@StringRes val title: Int, @DrawableRes val icon: Int) {
-    System(R.string.settings_ext_category_system_interface, R.drawable.ic_category_system),
-    Intelligence(R.string.settings_ext_category_intelligence, R.drawable.ic_category_intelligence),
-    Privacy(R.string.settings_ext_category_privacy_security, R.drawable.ic_category_privacy),
+internal enum class SettingsExtCategory(
+    @StringRes val title: Int,
+    @StringRes val summary: Int,
+    @DrawableRes val icon: Int,
+) {
+    System(
+        R.string.settings_ext_category_system_interface,
+        R.string.settings_ext_category_system_interface_summary,
+        R.drawable.ic_category_system,
+    ),
+    Intelligence(
+        R.string.settings_ext_category_intelligence,
+        R.string.settings_ext_category_intelligence_summary,
+        R.drawable.ic_category_intelligence,
+    ),
+    Privacy(
+        R.string.settings_ext_category_privacy_security,
+        R.string.settings_ext_category_privacy_security_summary,
+        R.drawable.ic_category_privacy,
+    ),
 }
 
 private val CategorySeeds =
@@ -126,10 +142,16 @@ internal fun SettingsExtCategoryCards(
                         CategoryIcon(category, tint, 32.dp)
                         CategoryArrow()
                     }
-                    Spacer(Modifier.height(18.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         text = stringResource(category.title),
                         style = MaterialTheme.typography.titleLarge,
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(category.summary),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
