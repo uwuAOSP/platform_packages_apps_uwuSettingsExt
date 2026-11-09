@@ -79,9 +79,7 @@ private fun homepageIconPalette(@DrawableRes iconRes: Int): HomepageIconPalette 
     R.drawable.ic_background_management,
     R.drawable.ic_background_log_description -> HomepageIconPalette.Green
 
-    R.drawable.ic_sensor_policy,
-    R.drawable.ic_spoofing,
-    R.drawable.ic_clipboard_policy -> HomepageIconPalette.Cyan
+    R.drawable.ic_spoofing -> HomepageIconPalette.Cyan
 
     R.drawable.ic_moment,
     R.drawable.ic_moment_arc_edit,
@@ -89,7 +87,6 @@ private fun homepageIconPalette(@DrawableRes iconRes: Int): HomepageIconPalette 
 
     R.drawable.ic_launcher_settings -> HomepageIconPalette.Purple
     R.drawable.ic_external_desktop -> HomepageIconPalette.BlueVariant
-    R.drawable.ic_appjump -> HomepageIconPalette.Blue
     R.drawable.ic_smart_suggestions -> HomepageIconPalette.Yellow
     R.drawable.ic_ai -> HomepageIconPalette.Purple
     R.drawable.ic_phone_camera -> HomepageIconPalette.Blue

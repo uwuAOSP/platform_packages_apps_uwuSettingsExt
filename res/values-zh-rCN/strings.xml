@@ -22,7 +22,6 @@
     <string name="settings_ext_category_intelligence">智能功能</string>
     <string name="settings_ext_prism_title">Prism</string>
     <string name="settings_ext_key_attestation_title">伪装设置</string>
-    <string name="settings_ext_app_jump_title">应用跳转权限</string>
     <string name="settings_ext_smart_suggestions_title">智能建议</string>
     <string name="settings_ext_launcher_settings_title">主屏幕设置</string>
     <string name="settings_ext_lyric_fetch_title">状态栏歌词</string>
@@ -110,8 +109,6 @@
     <string name="background_freezer_backend_cgroup2">CGroup2</string>
     <string name="background_freezer_backend_hybrid">混合</string>
     <string name="background_freezer_backend_unavailable">不可用</string>
-    <string name="sensor_policy_title">应用传感器访问</string>
-    <string name="clipboard_policy_title">应用剪贴板权限</string>
     <string name="background_diagnostics_category">诊断</string>
     <string name="background_export_logs">导出日志</string>
     <string name="background_log_exported">日志已导出</string>
@@ -317,7 +314,5 @@
     <plurals name="key_attestation_excluded_apps_count">
         <item quantity="other">已排除 %d 个应用</item>
     </plurals>
-
-    <string name="app_policy_load_failed">无法加载应用管控</string>
 
 </resources>
