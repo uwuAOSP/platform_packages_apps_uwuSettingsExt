@@ -25,7 +25,6 @@
     <string name="settings_ext_smart_suggestions_title">Smart Suggestions</string>
     <string name="settings_ext_launcher_settings_title">Home screen settings</string>
     <string name="settings_ext_lyric_fetch_title">Status Bar Lyric</string>
-    <string name="settings_ext_ai_core_title">uwuAI Core</string>
     <string name="interface_settings_title">Interface settings</string>
     <string name="interface_settings_category_qs">Quick Settings</string>
     <string name="qs_style_title">uwu tile style</string>

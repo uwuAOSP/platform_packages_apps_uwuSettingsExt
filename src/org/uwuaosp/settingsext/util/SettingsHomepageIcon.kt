@@ -88,7 +88,6 @@ private fun homepageIconPalette(@DrawableRes iconRes: Int): HomepageIconPalette 
     R.drawable.ic_launcher_settings -> HomepageIconPalette.Purple
     R.drawable.ic_external_desktop -> HomepageIconPalette.BlueVariant
     R.drawable.ic_smart_suggestions -> HomepageIconPalette.Yellow
-    R.drawable.ic_ai -> HomepageIconPalette.Purple
     R.drawable.ic_phone_camera -> HomepageIconPalette.Blue
     else -> HomepageIconPalette.Purple
 }

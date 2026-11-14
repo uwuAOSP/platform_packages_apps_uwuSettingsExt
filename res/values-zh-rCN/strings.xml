@@ -25,7 +25,6 @@
     <string name="settings_ext_smart_suggestions_title">智能建议</string>
     <string name="settings_ext_launcher_settings_title">主屏幕设置</string>
     <string name="settings_ext_lyric_fetch_title">状态栏歌词</string>
-    <string name="settings_ext_ai_core_title">uwuAI Core</string>
     <string name="interface_settings_title">界面设置</string>
     <string name="interface_settings_category_qs">快速设置</string>
     <string name="qs_style_title">uwu的磁贴样式</string>
