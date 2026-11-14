@@ -131,14 +131,10 @@
     <string name="moment_nav_handle_double_tap_switch_title">Use double-tap gesture</string>
     <string name="moment_nav_handle_double_tap_animation_description">Animation showing how to enter Moment</string>
     <string name="replay_animation">Replay animation</string>
-    <string name="moment_launch_title">Launch app in Moment</string>
-    <string name="moment_launch_summary">Choose an app to launch</string>
     <string name="moment_notification_click_title">Open notifications in Moment</string>
     <string name="moment_notification_click_summary">Tap a notification to open it in Moment, or use its button to open fullscreen</string>
     <string name="moment_notification_click_portrait_title">Use in portrait</string>
     <string name="moment_notification_click_landscape_title">Use in landscape</string>
-    <string name="moment_all_apps">All Apps</string>
-    <string name="moment_cannot_launch_app">Could not launch the app</string>
     <string name="moment_gestures_section">Gestures</string>
     <string name="moment_arc_section">MomentArc</string>
     <string name="moment_arc_gesture_title">Open MomentArc</string>

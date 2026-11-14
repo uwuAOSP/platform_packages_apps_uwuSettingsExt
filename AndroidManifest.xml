@@ -81,12 +81,6 @@
             android:label="@string/moment_nav_handle_double_tap_title" />
 
         <activity
-            android:name=".moment.MomentAllAppsActivity"
-            android:exported="true"
-            android:label="@string/moment_all_apps"
-            android:permission="android.permission.STATUS_BAR" />
-
-        <activity
             android:name=".smartsuggestions.SmartSuggestionsSettingsActivity"
             android:exported="false"
             android:label="@string/smart_suggestions_settings_title" />

@@ -128,14 +128,10 @@
     <string name="moment_nav_handle_double_tap_switch_title">启用双击手势</string>
     <string name="moment_nav_handle_double_tap_animation_description">进入 Moment 的操作演示动画</string>
     <string name="replay_animation">重播动画</string>
-    <string name="moment_launch_title">以 Moment 启动应用</string>
-    <string name="moment_launch_summary">选择要启动的应用</string>
     <string name="moment_notification_click_title">在 Moment 中打开通知</string>
     <string name="moment_notification_click_summary">点按通知时使用 Moment，或通过通知按钮全屏打开</string>
     <string name="moment_notification_click_portrait_title">在竖屏时使用</string>
     <string name="moment_notification_click_landscape_title">在横屏时使用</string>
-    <string name="moment_all_apps">全部应用</string>
-    <string name="moment_cannot_launch_app">无法启动该应用</string>
     <string name="moment_gestures_section">手势</string>
     <string name="moment_arc_section">MomentArc</string>
     <string name="moment_arc_gesture_title">打开 MomentArc</string>

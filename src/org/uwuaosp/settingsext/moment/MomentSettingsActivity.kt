@@ -281,19 +281,6 @@ private fun MomentSettingsScreen(onNavigateUp: () -> Unit) {
                     },
                 )
             }
-            item {
-                PreferenceRow(
-            title = stringResource(R.string.moment_launch_title),
-            summary = stringResource(R.string.moment_launch_summary),
-            iconContent = {
-                SettingsHomepageIcon(iconRes = R.drawable.ic_moment)
-            },
-            enabled = momentEnabled,
-            onClick = {
-                MomentAllAppsActivity.startInMoment(context)
-            },
-                )
-            }
         }
     }
 }
