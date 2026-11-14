@@ -24,7 +24,7 @@ import org.uwuaosp.compose.widget.preference.MainSwitchPreference
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
-import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.ui.SettingsFooter
 import org.uwuaosp.compose.widget.ui.SettingsTopIntro
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
@@ -95,6 +95,6 @@ private fun ExternalDesktopSettingsScreen(onNavigateUp: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        SettingsFooterLegacy(stringResource(R.string.external_desktop_footer))
+        SettingsFooter(stringResource(R.string.external_desktop_footer))
     }
 }

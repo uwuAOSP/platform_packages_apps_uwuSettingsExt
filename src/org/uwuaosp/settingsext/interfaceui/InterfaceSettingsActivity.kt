@@ -51,7 +51,7 @@ import org.uwuaosp.compose.widget.preference.PreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
-import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.ui.SettingsFooter
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
@@ -134,7 +134,7 @@ private fun InterfaceSettingsScreen(onNavigateUp: () -> Unit) {
                 )
             }
         }
-        SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
+        SettingsFooter(stringResource(R.string.custom_font_footer))
 
         SettingsSection(title = stringResource(R.string.interface_settings_category_icons)) {
             item {

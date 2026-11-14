@@ -68,7 +68,7 @@ import kotlinx.coroutines.withContext
 import org.uwuaosp.compose.widget.preference.PreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
 import org.uwuaosp.compose.widget.scaffold.SettingsAppBarScaffold
-import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.ui.SettingsFooter
 import org.uwuaosp.settingsext.util.SettingsHomepageIcon
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
@@ -237,7 +237,7 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                 }
             } else {
                 item(key = "empty", contentType = "footer") {
-                    SettingsFooterLegacy(stringResource(R.string.custom_font_empty_summary))
+                    SettingsFooter(stringResource(R.string.custom_font_empty_summary))
                 }
             }
 
@@ -275,7 +275,7 @@ private fun CustomFontScreen(onNavigateUp: () -> Unit) {
                 }
             }
             item(key = "footer", contentType = "footer") {
-                SettingsFooterLegacy(stringResource(R.string.custom_font_footer))
+                SettingsFooter(stringResource(R.string.custom_font_footer))
             }
         }
     }

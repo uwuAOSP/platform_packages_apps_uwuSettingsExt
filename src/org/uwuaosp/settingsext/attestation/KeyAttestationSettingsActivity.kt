@@ -39,7 +39,7 @@ import java.io.StringReader
 import org.uwuaosp.compose.widget.preference.PreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
-import org.uwuaosp.compose.widget.ui.SettingsFooterLegacy
+import org.uwuaosp.compose.widget.ui.SettingsFooter
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.apppicker.AppSelectionActivity
@@ -129,7 +129,7 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                 )
             }
             item {
-                SettingsFooterLegacy(
+                SettingsFooter(
                     KeyAttestationSummaryUtils.buildKeyboxFooterSummary(context, keyboxData).toString()
                 )
             }
@@ -162,7 +162,7 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                 )
             }
             item {
-                SettingsFooterLegacy(stringResource(R.string.key_attestation_excluded_apps_footer))
+                SettingsFooter(stringResource(R.string.key_attestation_excluded_apps_footer))
             }
         }
 
@@ -190,7 +190,7 @@ private fun KeyAttestationSettingsScreen(refreshToken: Int, onNavigateUp: () -> 
                 )
             }
             item {
-                SettingsFooterLegacy(
+                SettingsFooter(
                     KeyAttestationSummaryUtils.buildPifFooterSummary(context, pifData).toString()
                 )
             }
