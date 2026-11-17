@@ -54,6 +54,7 @@ import org.uwuaosp.compose.widget.preference.PrimarySwitchPreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
+import org.uwuaosp.settingsext.apppicker.AppSelectionActivity
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
 import org.uwuaosp.settingsext.R
 
@@ -98,6 +99,17 @@ private fun MomentSettingsScreen(lifecycle: Lifecycle, onNavigateUp: () -> Unit)
     }
     var notificationClickLandscapeEnabled by remember {
         mutableStateOf(MomentSecureSettings.isNotificationClickLandscapeEnabled(context, true))
+    }
+    var appJumpEnabled by remember {
+        mutableStateOf(MomentSecureSettings.isAppJumpEnabled(context))
+    }
+    var appJumpSourceCount by remember {
+        mutableStateOf(MomentSecureSettings.getAppJumpSourcePackages(context).size)
+    }
+    val appJumpSettingsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        appJumpSourceCount = MomentSecureSettings.getAppJumpSourcePackages(context).size
     }
     val navHandleDoubleTapSettingsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
@@ -195,6 +207,40 @@ private fun MomentSettingsScreen(lifecycle: Lifecycle, onNavigateUp: () -> Unit)
                 MomentSecureSettings.setNotificationClickLandscapeEnabled(context, enabled)
             },
             enabled = momentEnabled && notificationClickEnabled,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        SettingsSection(title = stringResource(R.string.moment_app_jump_section)) {
+            item {
+                SwitchPreferenceRow(
+                    title = stringResource(R.string.moment_app_jump_title),
+                    summary = stringResource(R.string.moment_app_jump_summary),
+                    checked = appJumpEnabled,
+                    onCheckedChange = { enabled ->
+                        appJumpEnabled = enabled
+                        MomentSecureSettings.setAppJumpEnabled(context, enabled)
+                    },
+                    enabled = momentEnabled,
+                )
+            }
+            item {
+                PreferenceRow(
+                    title = stringResource(R.string.moment_app_jump_source_apps_title),
+                    summary = stringResource(
+                        R.string.moment_app_jump_source_apps_summary, appJumpSourceCount,
+                    ),
+                    enabled = momentEnabled && appJumpEnabled,
+                    onClick = {
+                        appJumpSettingsLauncher.launch(
+                            Intent(context, AppSelectionActivity::class.java)
+                                .putExtra(
+                                    AppSelectionActivity.EXTRA_SELECTION_MODE,
+                                    AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP,
+                                ),
+                        )
+                    },
                 )
             }
         }

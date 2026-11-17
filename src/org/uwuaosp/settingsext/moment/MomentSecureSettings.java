@@ -21,6 +21,11 @@ import android.provider.Settings;
 
 import org.uwuaosp.settingsext.util.SettingsUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public final class MomentSecureSettings {
     private MomentSecureSettings() {
     }
@@ -32,6 +37,7 @@ public final class MomentSecureSettings {
         setNotificationClickEnabled(context, false);
         setNotificationClickPortraitEnabled(context, false);
         setNotificationClickLandscapeEnabled(context, false);
+        setAppJumpEnabled(context, false);
     }
 
     public static void setEnabled(Context context, boolean enabled) {
@@ -50,6 +56,37 @@ public final class MomentSecureSettings {
 
     public static void setFixedAspectRatio(Context context, boolean fixed) {
         SettingsUtils.putSecureBoolean(context, Settings.Secure.MOMENT_FIXED_ASPECT_RATIO, fixed);
+    }
+
+    public static boolean isAppJumpEnabled(Context context) {
+        return SettingsUtils.getSecureBoolean(
+                context, Settings.Secure.MOMENT_APP_JUMP_ENABLED, false);
+    }
+
+    public static void setAppJumpEnabled(Context context, boolean enabled) {
+        SettingsUtils.putSecureBoolean(context, Settings.Secure.MOMENT_APP_JUMP_ENABLED, enabled);
+    }
+
+    public static List<String> getAppJumpSourcePackages(Context context) {
+        String value = Settings.Secure.getString(
+                context.getContentResolver(), Settings.Secure.MOMENT_APP_JUMP_SOURCE_PACKAGES);
+        if (value == null || value.isBlank()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(value.split(":"))
+                .filter(packageName -> !packageName.isBlank())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public static void setAppJumpSourcePackages(Context context, List<String> packages) {
+        String value = packages.stream()
+                .filter(packageName -> packageName != null && !packageName.isBlank())
+                .distinct()
+                .sorted()
+                .collect(Collectors.joining(":"));
+        Settings.Secure.putString(context.getContentResolver(),
+                Settings.Secure.MOMENT_APP_JUMP_SOURCE_PACKAGES, value.isEmpty() ? null : value);
     }
 
     public static void setArcGestureEnabled(Context context, boolean enabled) {

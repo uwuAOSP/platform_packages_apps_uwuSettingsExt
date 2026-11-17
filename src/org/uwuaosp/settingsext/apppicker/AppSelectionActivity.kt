@@ -48,6 +48,7 @@ import org.uwuaosp.compose.widget.preference.SettingsSectionHeader
 import org.uwuaosp.settingsext.R
 import org.uwuaosp.settingsext.SettingsExtTheme
 import org.uwuaosp.settingsext.attestation.KeyAttestationSecureSettings
+import org.uwuaosp.settingsext.moment.MomentSecureSettings
 import org.uwuaosp.settingsext.smartsuggestions.SmartSuggestionsSecureSettings
 
 class AppSelectionActivity : ComponentActivity() {
@@ -57,6 +58,7 @@ class AppSelectionActivity : ComponentActivity() {
         const val EXTRA_RESULT_PACKAGE = "result_package"
         const val EXTRA_RESULT_LABEL = "result_label"
         const val SELECTION_MODE_KEYBOX_EXCLUSION = "keybox_exclusion"
+        const val SELECTION_MODE_MOMENT_APP_JUMP = "moment_app_jump"
         const val SELECTION_MODE_MUSIC_SUGGESTION = "music_suggestion"
         const val SELECTION_MODE_SINGLE_APP = "single_app"
     }
@@ -108,13 +110,16 @@ private fun AppSelectionScreen(
     onSingleAppSelected: (AppPickerEntry) -> Unit,
 ) {
     val context = LocalContext.current
-    val multiple = mode == AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION
+    val multiple = mode == AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ||
+        mode == AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP
     var apps by remember { mutableStateOf<List<AppPickerEntry>>(emptyList()) }
     var selectedPackages by remember {
         mutableStateOf(
             when (mode) {
                 AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
                     KeyAttestationSecureSettings.getExcludedPackages(context).toSet()
+                AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP ->
+                    MomentSecureSettings.getAppJumpSourcePackages(context).toSet()
                 AppSelectionActivity.SELECTION_MODE_MUSIC_SUGGESTION ->
                     setOf(
                         SmartSuggestionsSecureSettings.getMusicPackage(
@@ -177,6 +182,8 @@ private fun AppSelectionScreen(
         when (mode) {
             AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
                 stringResource(R.string.key_attestation_excluded_apps_title)
+            AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP ->
+                stringResource(R.string.moment_app_jump_source_apps_title)
             AppSelectionActivity.SELECTION_MODE_MUSIC_SUGGESTION ->
                 stringResource(R.string.switch_music_suggestion_title)
             else -> stringResource(R.string.app_picker_title)
@@ -244,6 +251,8 @@ private fun saveMultipleSelection(context: Context, mode: String, packages: Set<
     when (mode) {
         AppSelectionActivity.SELECTION_MODE_KEYBOX_EXCLUSION ->
             KeyAttestationSecureSettings.setExcludedPackages(context, packages.toList())
+        AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP ->
+            MomentSecureSettings.setAppJumpSourcePackages(context, packages.toList())
     }
 }
 

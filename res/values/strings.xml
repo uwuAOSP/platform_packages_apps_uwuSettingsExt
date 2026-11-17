@@ -119,6 +119,11 @@
     <string name="app_picker_all_apps">All Apps</string>
     <string name="moment_section_experience">Launch and experience</string>
     <string name="moment_notification_section">Notification opening</string>
+    <string name="moment_app_jump_section">In-app launches</string>
+    <string name="moment_app_jump_title">Open other apps in Moment</string>
+    <string name="moment_app_jump_summary">From selected apps, open other apps in Moment and dismiss the window when you return</string>
+    <string name="moment_app_jump_source_apps_title">Source apps</string>
+    <string name="moment_app_jump_source_apps_summary">Selected apps: %1$d</string>
     <string name="moment_settings_title">Moment</string>
     <string name="moment_tutorial_fullscreen_description">Double-tap the handle for full screen</string>
     <string name="moment_tutorial_close_description">Hold the handle to close</string>
