@@ -76,6 +76,11 @@
             android:label="@string/moment_settings_title" />
 
         <activity
+            android:name=".moment.MomentAppJumpSourceAppsActivity"
+            android:exported="false"
+            android:label="@string/moment_app_jump_source_apps_title" />
+
+        <activity
             android:name=".moment.NavHandleDoubleTapSettingsActivity"
             android:exported="false"
             android:label="@string/moment_nav_handle_double_tap_title" />

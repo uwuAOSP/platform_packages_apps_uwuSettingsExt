@@ -114,6 +114,8 @@
     <string name="background_log_export_failed">无法导出日志</string>
 
     <string name="app_picker_all_apps">全部应用</string>
+    <string name="app_picker_selected_apps">已选择</string>
+    <string name="app_picker_other_apps">其他应用</string>
     <string name="moment_section_experience">启动与体验</string>
     <string name="moment_notification_section">通知打开</string>
     <string name="moment_app_jump_section">应用内跳转小窗</string>
@@ -121,6 +123,11 @@
     <string name="moment_app_jump_summary">从所选应用跳转到其他应用时使用小窗，返回后自动收起</string>
     <string name="moment_app_jump_source_apps_title">源应用</string>
     <string name="moment_app_jump_source_apps_summary">已选择 %1$d 个应用</string>
+    <string name="moment_app_jump_add_source_apps_title">添加源应用</string>
+    <string name="moment_app_jump_add_source_apps_summary">选择要开启应用内跳转小窗的应用</string>
+    <string name="moment_app_jump_added_apps_section">已添加的应用（%1$d）</string>
+    <string name="moment_app_jump_added_apps_empty">尚未添加源应用</string>
+    <string name="moment_app_jump_remove_app">移除 %1$s</string>
     <string name="moment_settings_title">Moment</string>
     <string name="moment_tutorial_fullscreen_description">双击底部横条，展开到全屏</string>
     <string name="moment_tutorial_close_description">长按底部横条，关闭小窗</string>

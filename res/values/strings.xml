@@ -117,6 +117,8 @@
     <string name="background_log_export_failed">Could not export log</string>
 
     <string name="app_picker_all_apps">All Apps</string>
+    <string name="app_picker_selected_apps">Selected</string>
+    <string name="app_picker_other_apps">Other apps</string>
     <string name="moment_section_experience">Launch and experience</string>
     <string name="moment_notification_section">Notification opening</string>
     <string name="moment_app_jump_section">In-app launches</string>
@@ -124,6 +126,11 @@
     <string name="moment_app_jump_summary">From selected apps, open other apps in Moment and dismiss the window when you return</string>
     <string name="moment_app_jump_source_apps_title">Source apps</string>
     <string name="moment_app_jump_source_apps_summary">Selected apps: %1$d</string>
+    <string name="moment_app_jump_add_source_apps_title">Add source apps</string>
+    <string name="moment_app_jump_add_source_apps_summary">Choose installed apps to open cross-app launches in Moment</string>
+    <string name="moment_app_jump_added_apps_section">Added apps (%1$d)</string>
+    <string name="moment_app_jump_added_apps_empty">No source apps added yet</string>
+    <string name="moment_app_jump_remove_app">Remove %1$s</string>
     <string name="moment_settings_title">Moment</string>
     <string name="moment_tutorial_fullscreen_description">Double-tap the handle for full screen</string>
     <string name="moment_tutorial_close_description">Hold the handle to close</string>

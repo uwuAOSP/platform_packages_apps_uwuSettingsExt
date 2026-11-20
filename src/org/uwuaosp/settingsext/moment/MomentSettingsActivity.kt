@@ -54,7 +54,6 @@ import org.uwuaosp.compose.widget.preference.PrimarySwitchPreferenceRow
 import org.uwuaosp.compose.widget.preference.SettingsSection
 import org.uwuaosp.compose.widget.preference.SwitchPreferenceRow
 import org.uwuaosp.compose.widget.scaffold.SettingsScaffold
-import org.uwuaosp.settingsext.apppicker.AppSelectionActivity
 import org.uwuaosp.settingsext.background.ExpressiveModeMenuItem
 import org.uwuaosp.settingsext.R
 
@@ -234,11 +233,7 @@ private fun MomentSettingsScreen(lifecycle: Lifecycle, onNavigateUp: () -> Unit)
                     enabled = momentEnabled && appJumpEnabled,
                     onClick = {
                         appJumpSettingsLauncher.launch(
-                            Intent(context, AppSelectionActivity::class.java)
-                                .putExtra(
-                                    AppSelectionActivity.EXTRA_SELECTION_MODE,
-                                    AppSelectionActivity.SELECTION_MODE_MOMENT_APP_JUMP,
-                                ),
+                            Intent(context, MomentAppJumpSourceAppsActivity::class.java),
                         )
                     },
                 )
